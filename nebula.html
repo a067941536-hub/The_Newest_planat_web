@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="星雲示意圖：即時渲染的獵戶座大星雲、創生之柱、環狀星雲、蟹狀星雲與馬頭星雲，可拖曳、縮放、存成圖片。">
+<title>星雲示意圖 — 星宇・探索</title>
+<link rel="icon" type="image/png" href="images/planeticon.png">
+<link rel="stylesheet" href="SEstyle.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="cosmos/cosmos.css">
+<meta name="theme-color" content="#030412">
+<style>
+html,body{overflow:hidden}
+.wrapper{min-height:0!important;height:100vh;height:100svh}
+.stage{position:relative;height:calc(100svh - 72px);overflow:hidden;background:#02030c}
+#neb{position:absolute;left:0;top:0;width:100%;height:100%;display:block;cursor:grab;touch-action:none}
+#neb.drag{cursor:grabbing}
+.nb-card{position:absolute!important;left:16px;bottom:96px;width:340px;border-radius:22px!important;padding:18px 20px;z-index:20;overflow:visible!important}
+.nb-card small{color:var(--teal);letter-spacing:.3em;font-size:.68rem}
+.nb-card h1{margin:2px 0 8px;font-family:var(--font-display);font-size:1.5rem;letter-spacing:.05em;border:0!important;padding:0!important}
+.nb-card p{margin:0 0 10px;color:#d3dbff;font-size:.9rem;line-height:1.8}
+.nb-facts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.nb-facts div{padding:8px 11px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.nb-facts small{display:block;color:var(--dim);letter-spacing:.1em;font-size:.64rem}.nb-facts b{font-weight:500;font-size:.86rem;color:#fff}
+.nb-note{margin-top:10px;color:var(--dim);font-size:.72rem;line-height:1.6}
+.nb-bar{position:absolute;left:50%;transform:translateX(-50%);bottom:18px;z-index:21;display:flex;gap:6px;padding:8px;border-radius:999px!important;max-width:calc(100% - 28px);overflow-x:auto;scrollbar-width:none;width:max-content}
+.nb-bar::-webkit-scrollbar{display:none}
+.nb-chip{flex:none;font:inherit;font-size:.86rem;color:var(--muted);background:none;border:1px solid transparent;border-radius:99px;padding:8px 16px;cursor:pointer;transition:.3s var(--ease)}
+.nb-chip:hover{color:#fff;background:rgba(139,124,246,.2)}.nb-chip.on{color:#fff;background:linear-gradient(135deg,rgba(139,124,246,.55),rgba(94,234,212,.3));border-color:var(--line-strong);box-shadow:0 0 20px rgba(139,124,246,.4)}
+.nb-tools{position:absolute;right:16px;top:16px;z-index:21;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.nb-tools button{font:inherit;font-size:.8rem;color:var(--muted);background:rgba(8,12,36,.62);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:99px;padding:7px 15px;cursor:pointer;transition:.25s}
+.nb-tools button:hover{color:#fff;border-color:var(--line-strong)}.nb-tools button.on{color:#fff;border-color:var(--line-strong);background:rgba(139,124,246,.35)}
+.nb-title{position:absolute;left:50%;top:18px;transform:translateX(-50%);z-index:19;pointer-events:none;color:rgba(200,210,255,.7);font-size:.74rem;letter-spacing:.3em;white-space:nowrap;animation:fadeHint 12s forwards}
+@keyframes fadeHint{0%,75%{opacity:1}100%{opacity:0}}
+.nb-fallback{position:absolute;inset:0;display:none;align-items:center;justify-content:center;text-align:center;color:var(--muted);padding:30px;background:radial-gradient(circle at 40% 40%,#4b2a6e,#0a0a22 70%)}
+.nb-card.swap{animation:cardIn .6s var(--ease)}
+@keyframes cardIn{from{opacity:.2;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(max-width:860px){.nb-card{left:10px;right:10px;width:auto;bottom:84px;padding:12px 14px}.nb-card p{font-size:.8rem;line-height:1.6;margin-bottom:6px}.nb-facts{display:none}.nb-note{display:none}.nb-card h1{font-size:1.2rem}.nb-tools{top:10px;right:10px}.nb-title{display:none}}
+</style>
+</head>
+<body>
+<div class="wrapper">
+<header class="top-nav">
+  <a href="index.html" class="logo-link"></a>
+  <nav class="menu">
+    <a href="index.html" class="menu-item">主頁</a><a href="SEplanets.html" class="menu-item active">星球</a>
+    <a href="SEother.html" class="menu-item">星座</a><a href="SEfortune.html" class="menu-item">神社</a><a href="SEabout.html" class="menu-item">關於</a>
+  </nav>
+</header>
+<div class="stage" id="stage">
+  <canvas id="neb" aria-label="星雲示意圖"></canvas>
+  <div class="nb-fallback" id="fb"><div><h2>你的瀏覽器不支援 WebGL</h2><p>星雲需要 WebGL 才能即時渲染。請改用較新的瀏覽器，或開啟硬體加速。</p></div></div>
+  <div class="nb-title">拖曳移動 · 滾輪縮放 · 雙擊重置</div>
+  <div class="nb-tools"><button id="tAuto" class="on">✦ 自動漂移</button><button id="tMusic">🔇 配樂</button><button id="tShot">📷 存成圖片</button><button id="tFull">⛶ 全螢幕</button></div>
+  <aside class="nb-card glass" id="card"><small id="nType"></small><h1 id="nName"></h1><p id="nText"></p>
+    <div class="nb-facts" id="nFacts"></div><div class="nb-note">示意圖：依真實結構以程式即時生成的藝術詮釋，並非哈伯等望遠鏡的照片。</div></aside>
+  <nav class="nb-bar glass" id="bar" aria-label="選擇星雲"></nav>
+</div>
+</div>
+<script src="cosmos/cosmos.js"></script>
+<script src="cosmos/universe-music.js"></script>
+<script id="fs" type="x-shader/x-fragment">
+precision highp float;
+uniform vec2 uRes; uniform float uTime; uniform vec2 uPan; uniform float uZoom; uniform float uType;
+uniform vec3 uC1; uniform vec3 uC2; uniform vec3 uC3; uniform vec3 uC4; uniform float uSeed;
+float hash(vec2 p){ p=fract(p*vec2(123.34,456.21)); p+=dot(p,p+45.32); return fract(p.x*p.y); }
+float noise(vec2 p){ vec2 i=floor(p),f=fract(p); f=f*f*(3.-2.*f); float a=hash(i),b=hash(i+vec2(1.,0.)),c=hash(i+vec2(0.,1.)),d=hash(i+vec2(1.,1.)); return mix(mix(a,b,f.x),mix(c,d,f.x),f.y); }
+float fbm(vec2 p){ float v=0.,a=.5; mat2 m=mat2(1.6,1.2,-1.2,1.6); for(int i=0;i<5;i++){ v+=a*noise(p); p=m*p; a*=.5; } return v; }
+mat2 rot(float a){ float c=cos(a),s=sin(a); return mat2(c,-s,s,c); }
+vec3 stars(vec2 uv){
+  vec3 col=vec3(0.);
+  for(int l=0;l<3;l++){
+    float fl=float(l), sc=16.+fl*20.;
+    vec2 p=uv*sc+vec2(fl*17.3,fl*9.1)+uSeed, id=floor(p), f=fract(p)-.5;
+    float h=hash(id);
+    if(h>.84-fl*.05){
+      vec2 off=(vec2(hash(id+3.1),hash(id+7.7))-.5)*.6, q=f-off; float d=length(q), mag=hash(id+11.)*hash(id+5.);
+      float b=exp(-d*d*(300.-fl*70.))*(.35+1.8*mag), tw=.85+.15*sin(uTime*(1.+h*4.)+h*40.);
+      float sp=0.; if(mag>.5) sp=(exp(-abs(q.x)*70.)*exp(-abs(q.y)*6.)+exp(-abs(q.y)*70.)*exp(-abs(q.x)*6.))*.55*mag;
+      col+=mix(vec3(.7,.82,1.),vec3(1.,.82,.65),hash(id+2.2))*(b+sp)*tw;
+    }
+  }
+  return col;
+}
+float pillar(vec2 p){
+  float m=0.;
+  for(int i=0;i<3;i++){
+    float fi=float(i), x0=-.3+fi*.31, top=.18+fi*.05-fi*fi*.07, w=.11-fi*.018;
+    float e=(fbm(vec2(p.y*3.+fi*3.,p.x*2.))-.5)*.16;
+    float wx=w*1.25*(1.+max(0.,top-p.y)*.8);
+    float inside=smoothstep(wx,wx*.55,abs(p.x-x0+(p.y-top)*.08+e))*smoothstep(top+.03+e*.5,top-.12,p.y);
+    m=max(m,inside);
+  }
+  return m;
+}
+float sdCap(vec2 p,vec2 a,vec2 b,float r){ vec2 pa=p-a,ba=b-a; float h=clamp(dot(pa,ba)/dot(ba,ba),0.,1.); return length(pa-ba*h)-r; }
+void main(){
+  vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y; uv=uv/uZoom+uPan;
+  float t=uTime*.02; vec3 col=vec3(0.); float shade=1.;
+  if(uType<.5){ // 獵戶座大星雲
+    vec2 p=uv*1.7; vec2 q=vec2(fbm(p+vec2(0.,t)),fbm(p+vec2(5.2,1.3)-t)); vec2 r=vec2(fbm(p+3.*q+vec2(1.7,9.2)+t),fbm(p+3.*q+vec2(8.3,2.8)-t)); float f=fbm(p+3.*r);
+    float rad=length((uv-vec2(.06,.02))*vec2(1.,1.15)), core=exp(-rad*3.4);
+    float dens=smoothstep(.12,.95,f)*(.3+1.1*core)+core*.95;
+    vec3 c=mix(uC1,uC2,clamp(f*1.7,0.,1.)); c=mix(c,uC3,clamp(r.x*r.y*2.6,0.,1.)*.75); c+=uC4*core*core*.9;
+    float lane=smoothstep(.5,.78,fbm(p*2.1+q*2.)); c*=(1.-.7*lane*(1.-core));
+    col=c*dens*1.25; col+=uC3*.18*smoothstep(.4,.0,length(uv+vec2(.5,-.28)))*fbm(p*3.);
+  } else if(uType<1.5){ // 創生之柱
+    vec2 p=uv+vec2(0.,.05); float gas=fbm(p*2.3+vec2(0.,t*3.)+fbm(p*3.)*1.3);
+    vec3 bg=mix(uC1,uC2,gas)*(.3+1.0*gas)*(.55+.7*smoothstep(-.5,.5,p.y)); bg+=uC3*.25*smoothstep(.55,.9,gas);
+    float m=pillar(p); float lit=clamp((fbm(p*8.+1.)-.35)*2.,0.,1.);
+    vec3 body=mix(vec3(.12,.065,.05),vec3(.62,.34,.17),lit*.8);
+    float rim=clamp(m-pillar(p+vec2(.014,-.016)),0.,1.)*4.; float rim2=clamp(m-pillar(p+vec2(-.01,-.02)),0.,1.)*3.;
+    col=mix(bg,body,m*.93)+uC4*(rim+rim2*.5)*(.5+.8*fbm(p*20.)); shade=1.-m*.8;
+  } else if(uType<2.5){ // 環狀星雲
+    vec2 p=rot(-.45)*uv*vec2(1.,1.18); float r=length(p), n=fbm(p*5.+t*2.), ringR=.2+.035*(n-.5)*2.;
+    float ring=exp(-pow((r-ringR)/.042,2.)), inner=smoothstep(ringR,0.,r)*.55, outer=exp(-pow((r-ringR-.075)/.1,2.))*.5;
+    col=uC1*inner*(.7+.6*fbm(p*8.))+mix(uC2,uC3,smoothstep(.17,.3,r))*ring*(.6+1.2*n)*(.75+.5*fbm(p*16.))+uC3*outer*fbm(p*3.5)*1.3;
+    col+=vec3(.85,.92,1.)*exp(-r*r*1400.)*3.2; shade=1.;
+  } else if(uType<3.5){ // 蟹狀星雲
+    vec2 p=uv*1.5; float rad=length(p*vec2(1.,1.18)), shape=smoothstep(.55,.18,rad);
+    float fil=abs(fbm(p*5.+fbm(p*3.)*2.2)-.5), fil2=1.-smoothstep(0.,.055,fil), fil3=1.-smoothstep(0.,.04,abs(fbm(p*9.+4.+t)-.5));
+    col=uC1*fil2*shape*1.7+uC2*fil3*shape*1.1+uC3*exp(-rad*3.6)*.95*(.6+.7*fbm(p*4.))+uC4*fil2*fil3*shape*.8;
+    col+=vec3(.8,.9,1.)*exp(-length(p-vec2(-.03,.03))*60.)*2.2;
+  } else { // 馬頭星雲
+    vec2 p=uv+vec2(.05,.12); float bgn=fbm(p*3.+t)*.65+.2, streak=fbm(p*vec2(9.,2.)+t);
+    float up=smoothstep(-.08,.12,p.y+.02*sin(p.x*9.)+(fbm(p*5.)-.5)*.12);
+    vec3 bg=mix(uC1,uC2,bgn)*(.4+1.5*up*(1.-smoothstep(.1,.75,p.y)*.4))*(.7+.6*streak);
+    float e=(fbm(p*8.)-.5)*.045; float neck=sdCap(p,vec2(.02,-.12),vec2(.05,.22),.1), head=length(rot(.55)*(p-vec2(.15,.31))*vec2(1.,1.65))-.14;
+    float sd=min(neck,head)+e; float horse=1.-smoothstep(-.015,.02,sd); float bottom=1.-smoothstep(-.12,-.02,p.y-(.0+e*2.));
+    float dust=max(horse,bottom); float edge=clamp(smoothstep(.0,.03,sd+.03)-smoothstep(.03,.07,sd+.03),0.,1.)*(1.-bottom);
+    col=bg*(1.-dust*.95)+uC3*edge*.7*up+uC1*.12*bottom*fbm(p*10.); shade=1.-dust*.9;
+    col+=uC3*.35*smoothstep(.55,.0,length(p-vec2(-.55,.1)))*fbm(p*4.); // 火焰星雲暗示
+  }
+  col+=stars(uv)*shade;
+  col=1.-exp(-col*1.1); col=pow(col,vec3(1.05));
+  float vg=1.-smoothstep(.55,1.25,length((gl_FragCoord.xy-.5*uRes)/uRes.y)); col*=.55+.45*vg;
+  gl_FragColor=vec4(col,1.);
+}
+</script>
+<script>
+(function(){
+'use strict';
+var NEB=[
+ {n:'獵戶座大星雲',en:'M42 · ORION NEBULA',type:'發射星雲（恆星誕生區）',t:'在獵戶座「劍」的位置，肉眼就能看見一小團模糊的光。氣體被剛誕生的熱恆星照亮，發出粉紅與青綠的光，中央有一群年輕的「四邊形」恆星。',
+  f:[['距離','約 1,350 光年'],['大小','約 24 光年'],['年齡','數百萬年（很年輕）'],['最佳季節','冬季']],
+  c:[[1,.2,.28],[.95,.45,.3],[.3,.75,.85],[1,.9,.75]],seed:3},
+ {n:'鷹星雲・創生之柱',en:'M16 · PILLARS OF CREATION',type:'發射星雲（柱狀結構）',t:'哈伯太空望遠鏡 1995 年拍下的名作。一根根由冷氣體與塵埃組成的「柱子」，頂端被強烈的紫外線侵蝕，內部正孕育著新恆星。',
+  f:[['距離','約 7,000 光年'],['柱子高度','約 4–5 光年'],['所在星座','巨蛇座'],['最佳季節','夏季']],
+  c:[[.1,.3,.45],[.95,.62,.22],[.25,.8,.8],[1,.85,.5]],seed:8},
+ {n:'環狀星雲',en:'M57 · RING NEBULA',type:'行星狀星雲',t:'一顆類似太陽的恆星走到生命末期，把外層氣體吹散，形成一圈發光的「環」。中央是留下的白矮星，外圈偏紅、內圈偏藍綠。',
+  f:[['距離','約 2,300 光年'],['大小','約 1–1.5 光年'],['中央天體','白矮星'],['所在星座','天琴座']],
+  c:[[.1,.45,.8],[.2,.8,.9],[1,.2,.25],[1,.8,.6]],seed:5},
+ {n:'蟹狀星雲',en:'M1 · CRAB NEBULA',type:'超新星殘骸',t:'西元 1054 年，宋朝天文官記錄下天空中突然出現的一顆「客星」，它就是這次超新星爆炸。殘骸至今仍在擴張，中心是一顆每秒自轉約 30 圈的脈衝星。',
+  f:[['距離','約 6,500 光年'],['寬度','約 11 光年'],['爆發年份','1054 年'],['中心天體','脈衝星']],
+  c:[[1,.45,.12],[.4,.55,1],[.2,.35,.9],[1,.8,.5]],seed:11},
+ {n:'馬頭星雲',en:'B33 · HORSEHEAD NEBULA',type:'暗星雲',t:'在紅色發光氣體 IC 434 的映襯下，一團黑暗的塵埃柱剛好呈現馬頭的輪廓。它自己不發光，而是遮住了後面的光。',
+  f:[['距離','約 1,400 光年'],['馬頭高度','約 3–4 光年'],['類型','暗星雲'],['所在星座','獵戶座']],
+  c:[[.8,.1,.12],[1,.4,.38],[1,.65,.4],[1,.8,.7]],seed:14}
+];
+var cv=document.getElementById('neb'),stage=document.getElementById('stage'),gl=cv.getContext('webgl',{preserveDrawingBuffer:true,antialias:false})||cv.getContext('experimental-webgl',{preserveDrawingBuffer:true});
+if(!gl){document.getElementById('fb').style.display='flex';return;}
+function sh(type,src){var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){console.error(gl.getShaderInfoLog(s));}return s;}
+var vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+var prog=gl.createProgram();gl.attachShader(prog,sh(gl.VERTEX_SHADER,vs));gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,document.getElementById('fs').textContent));gl.linkProgram(prog);gl.useProgram(prog);
+var buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+var loc=gl.getAttribLocation(prog,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+var U={};['uRes','uTime','uPan','uZoom','uType','uC1','uC2','uC3','uC4','uSeed'].forEach(function(n){U[n]=gl.getUniformLocation(prog,n);});
+var S={i:+(location.hash.slice(1))||0,zoom:1,tz:1,px:0,py:0,tpx:0,tpy:0,auto:(window.COSMOS?COSMOS.anim:true),time:0,drag:null,Q:.72,music:false};
+if(S.i<0||S.i>=NEB.length)S.i=0;
+var W,H;function resize(){var dpr=Math.min(devicePixelRatio||1,2)*S.Q;W=Math.max(2,Math.floor(stage.clientWidth*dpr));H=Math.max(2,Math.floor(stage.clientHeight*dpr));cv.width=W;cv.height=H;gl.viewport(0,0,W,H);}
+addEventListener('resize',resize);resize();
+// UI
+var bar=document.getElementById('bar');NEB.forEach(function(n,i){var b=document.createElement('button');b.className='nb-chip';b.textContent=n.n.split('・')[0];b.onclick=function(){pick(i);};bar.appendChild(b);});
+function pick(i){S.i=i;S.zoom=S.tz=1;S.px=S.py=S.tpx=S.tpy=0;var n=NEB[i];
+  bar.querySelectorAll('.nb-chip').forEach(function(b,k){b.classList.toggle('on',k===i);});
+  document.getElementById('nType').textContent=n.en;document.getElementById('nName').textContent=n.n;document.getElementById('nText').textContent=n.t;
+  document.getElementById('nFacts').innerHTML=n.f.map(function(f){return '<div><small>'+f[0]+'</small><b>'+f[1]+'</b></div>';}).join('');
+  var c=document.getElementById('card');c.classList.remove('swap');void c.offsetWidth;c.classList.add('swap');history.replaceState(null,'','#'+i);}
+pick(S.i);
+// 互動
+cv.addEventListener('pointerdown',function(e){cv.setPointerCapture(e.pointerId);S.drag={x:e.clientX,y:e.clientY};S.auto=false;document.getElementById('tAuto').classList.remove('on');cv.classList.add('drag');});
+cv.addEventListener('pointermove',function(e){if(!S.drag)return;var k=1/(Math.min(cv.clientWidth,cv.clientHeight)*S.zoom);S.tpx-=(e.clientX-S.drag.x)*k;S.tpy+=(e.clientY-S.drag.y)*k;S.drag={x:e.clientX,y:e.clientY};});
+cv.addEventListener('pointerup',function(){S.drag=null;cv.classList.remove('drag');});
+cv.addEventListener('wheel',function(e){e.preventDefault();S.tz=Math.max(.7,Math.min(7,S.tz*(e.deltaY<0?1.12:1/1.12)));},{passive:false});
+cv.addEventListener('dblclick',function(){S.tz=1;S.tpx=S.tpy=0;});
+COSMOS.onAnim(function(v){S.auto=v;document.getElementById('tAuto').classList.toggle('on',v);});document.getElementById('tAuto').classList.toggle('on',S.auto);document.getElementById('tAuto').onclick=function(){S.auto=!S.auto;this.classList.toggle('on',S.auto);};
+document.getElementById('tShot').onclick=function(){render(performance.now());var a=document.createElement('a');a.download='nebula-'+NEB[S.i].en.split(' · ')[0]+'.png';a.href=cv.toDataURL('image/png');a.click();};
+document.getElementById('tFull').onclick=function(){var el=stage;if(document.fullscreenElement)document.exitFullscreen();else if(el.requestFullscreen)el.requestFullscreen();};
+var mb=document.getElementById('tMusic');mb.onclick=function(){if(!UMUSIC.isOn())UMUSIC.start();else UMUSIC.setMute(!UMUSIC.isMuted());var on=UMUSIC.isOn()&&!UMUSIC.isMuted();S.music=on;mb.textContent=on?'🔊 配樂':'🔇 配樂';mb.classList.toggle('on',on);};
+addEventListener('keydown',function(e){if(e.key==='ArrowRight')pick((S.i+1)%NEB.length);if(e.key==='ArrowLeft')pick((S.i+NEB.length-1)%NEB.length);});
+var t0=performance.now(),last=t0;
+function render(now){var n=NEB[S.i],t=S.time;
+  gl.uniform2f(U.uRes,W,H);gl.uniform1f(U.uTime,t);gl.uniform2f(U.uPan,S.px,S.py);gl.uniform1f(U.uZoom,S.zoom);gl.uniform1f(U.uType,S.i);gl.uniform1f(U.uSeed,n.seed);
+  gl.uniform3fv(U.uC1,n.c[0]);gl.uniform3fv(U.uC2,n.c[1]);gl.uniform3fv(U.uC3,n.c[2]);gl.uniform3fv(U.uC4,n.c[3]);gl.drawArrays(gl.TRIANGLES,0,3);}
+function loop(now){var dt=Math.min(.05,(now-last)/1000);last=now;if(COSMOS.anim)S.time+=dt;
+  S.zoom+=(S.tz-S.zoom)*Math.min(1,dt*6);S.px+=(S.tpx-S.px)*Math.min(1,dt*8);S.py+=(S.tpy-S.py)*Math.min(1,dt*8);
+  if(S.auto){var tt=now/1000;S.tpx=Math.sin(tt*.07)*.05;S.tpy=Math.cos(tt*.05)*.035;S.tz=1.12+Math.sin(tt*.045)*.1;}
+  render(now);if(S.music)UMUSIC.update(19+S.zoom*.3,.15,.6);requestAnimationFrame(loop);}
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

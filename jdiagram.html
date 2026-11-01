@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="太陽系互動模型：用真實軌道週期推算行星今日位置，可切換比例、縮放、點選查看資料。">
+<title>太陽系模型 — 星宇・探索</title>
+<link rel="icon" type="image/png" href="images/planeticon.png">
+<link rel="stylesheet" href="SEstyle.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="cosmos/cosmos.css">
+<meta name="theme-color" content="#060818">
+<style>
+html,body{overflow:hidden}
+.sound-fab,.anim-fab{display:none!important}
+.wrapper{min-height:0!important;height:100vh;height:100svh}
+.stage{position:relative;height:calc(100svh - 72px);overflow:hidden}
+#sim{position:absolute;left:0;top:0;width:100%;height:100%;touch-action:none;cursor:grab;display:block}
+#sim.drag{cursor:grabbing}
+.sim-panel{position:absolute!important;overflow:auto!important;border-radius:20px!important;padding:16px 18px;z-index:20}
+.sim-panel::-webkit-scrollbar{width:6px}
+.p-left{left:16px;top:16px;width:272px;max-height:calc(100% - 100px)}
+.p-left h1{font-family:var(--font-display);font-size:1.15rem;margin:0 0 2px;letter-spacing:.06em}
+.p-left .sub{color:var(--muted);font-size:.78rem;margin:0 0 12px}
+.grp{margin-top:14px}
+.grp>label{display:block;color:var(--dim);font-size:.7rem;letter-spacing:.2em;margin-bottom:7px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button,.tg{font:inherit;font-size:.8rem;color:var(--muted);background:rgba(139,124,246,.08);border:1px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer;transition:.25s var(--ease)}
+.seg button:hover,.tg:hover{color:#fff;border-color:var(--line-strong)}
+.seg button.on,.tg.on{color:#fff;background:linear-gradient(135deg,rgba(139,124,246,.5),rgba(94,234,212,.28));border-color:var(--line-strong);box-shadow:0 0 16px rgba(139,124,246,.3)}
+.simdate{font-family:var(--font-display);font-size:1.25rem;letter-spacing:.06em;color:#fff}
+.simdate small{display:block;color:var(--muted);font-size:.72rem;letter-spacing:.06em;font-family:var(--font)}
+.date-in,.ev-sel{width:100%;margin-bottom:7px;font:inherit;font-size:.82rem;color:#fff;background:rgba(139,124,246,.12);border:1px solid var(--line);border-radius:12px;padding:7px 10px;color-scheme:dark}
+.ev-sel option{background:#10143a}
+.ev-note{margin-top:4px!important}
+.note{margin-top:12px;padding:10px 12px;border-radius:12px;background:rgba(94,234,212,.07);border:1px solid rgba(94,234,212,.2);color:#cfe;font-size:.76rem;line-height:1.6}
+.p-right{right:16px;top:16px;width:318px;max-height:calc(100% - 100px)}
+.p-right h2{margin:0;font-family:var(--font-display);font-size:1.5rem;letter-spacing:.06em;border:0!important;padding:0!important;display:flex;align-items:center;gap:10px}
+.tag{font-size:.68rem;padding:3px 10px;border-radius:999px;border:1px solid var(--line-strong);color:var(--teal);letter-spacing:.12em;font-family:var(--font)}
+.tagline{color:#d5dcff;font-size:.9rem;margin:8px 0 12px;line-height:1.7}
+.stats-g{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stats-g div{padding:9px 11px;border-radius:12px;background:rgba(255,255,255,.035);border:1px solid var(--line)}
+.stats-g small{display:block;color:var(--dim);font-size:.68rem;letter-spacing:.1em}
+.stats-g b{font-size:.88rem;font-weight:500;color:#fff}
+.cmp{margin-top:12px;font-size:.78rem;color:var(--muted)}
+.cmp .bar{height:8px;border-radius:99px;background:rgba(255,255,255,.07);margin-top:6px;overflow:hidden}
+.cmp .bar i{display:block;height:100%;border-radius:99px;background:var(--grad);transition:width .7s var(--ease)}
+.fun{margin-top:12px;font-size:.82rem;color:#e7defa;line-height:1.7}
+.fun::before{content:"💡 ";}
+.go-detail{display:inline-flex;margin-top:14px;padding:9px 20px;border-radius:999px;text-decoration:none;color:#fff;font-size:.85rem;background:linear-gradient(120deg,#7c6cf0,#3b9eff 60%,#2dd4bf);box-shadow:0 8px 24px rgba(76,110,245,.35);transition:.3s var(--ease)}
+.go-detail:hover{transform:translateY(-2px)}
+.guide ul{margin:8px 0 0;padding-left:1.2em;color:var(--muted);font-size:.85rem;line-height:1.9}
+.guide li b{color:#fff;font-weight:500}
+.close{position:absolute;right:12px;top:10px;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer;font-size:.9rem}
+.close:hover{color:#fff;border-color:var(--line-strong)}
+.bar-bottom{position:absolute;width:max-content;left:50%;transform:translateX(-50%);bottom:16px;z-index:20;display:flex;gap:6px;padding:8px;max-width:calc(100% - 32px);overflow-x:auto;border-radius:999px!important;scrollbar-width:none}
+.bar-bottom::-webkit-scrollbar{display:none}
+.chip-b{flex:none;display:flex;align-items:center;gap:7px;font:inherit;font-size:.82rem;color:var(--muted);background:none;border:1px solid transparent;border-radius:999px;padding:6px 13px 6px 9px;cursor:pointer;transition:.25s var(--ease)}
+.chip-b i{width:11px;height:11px;border-radius:50%;box-shadow:0 0 10px currentColor}
+.chip-b:hover{color:#fff;background:rgba(139,124,246,.14)}
+.chip-b.on{color:#fff;background:rgba(139,124,246,.28);border-color:var(--line-strong)}
+.zoom-btns{position:absolute;right:16px;bottom:76px;z-index:20;display:flex;flex-direction:column;gap:8px}
+.scale-tip{position:absolute;left:50%;transform:translateX(-50%);top:14px;z-index:15;color:var(--dim);font-size:.74rem;letter-spacing:.12em;pointer-events:none;white-space:nowrap}
+#tip{position:absolute;z-index:30;pointer-events:none;padding:6px 12px;border-radius:10px;background:rgba(8,12,36,.85);border:1px solid var(--line-strong);font-size:.8rem;opacity:0;transition:opacity .15s;transform:translate(12px,-34px)}
+@media(max-width:860px){
+  .p-left{width:auto;right:16px;max-height:none;padding:12px 14px}
+  .p-left .sub,.p-left .note,.p-left .grp.hide-m{display:none}
+  .p-left .grp{margin-top:8px}
+  .p-left .seg button{padding:4px 10px;font-size:.74rem}
+  .p-right{top:auto;right:12px;left:12px;width:auto;bottom:70px;max-height:42%}
+  .zoom-btns{display:none}
+  .scale-tip{display:none}
+  .bar-bottom{left:12px;transform:none;max-width:calc(100% - 24px);padding-left:56px}
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+<header class="top-nav">
+  <a href="index.html" class="logo-link"></a>
+  <nav class="menu">
+    <a href="index.html" class="menu-item">主頁</a>
+    <a href="SEplanets.html" class="menu-item active">星球</a>
+    <a href="SEother.html" class="menu-item">星座</a>
+    <a href="SEfortune.html" class="menu-item">神社</a>
+    <a href="SEabout.html" class="menu-item">關於</a>
+  </nav>
+</header>
+
+<div class="stage" id="stage">
+  <canvas id="sim" aria-label="太陽系互動模型"></canvas>
+  <div class="scale-tip" id="scaleTip"></div>
+  <div id="tip"></div>
+
+  <aside class="sim-panel glass p-left">
+    <h1>太陽系模型</h1>
+    <p class="sub">行星的位置依真實公轉週期推算（近似）</p>
+    <div class="simdate" id="simDate">—<small id="simDelta"></small></div>
+
+    <div class="grp"><label>時間流速</label>
+      <div class="seg" id="speedSeg">
+        <button data-v="0">⏸ 暫停</button><button data-v="1">1 天/秒</button><button data-v="10">10 天/秒</button>
+        <button data-v="30" class="on">1 月/秒</button><button data-v="365">1 年/秒</button><button data-v="3650">10 年/秒</button>
+      </div>
+    </div>
+    <div class="grp"><label>時間旅行</label>
+      <input type="date" id="dateIn" class="date-in" min="1700-01-01" max="2300-12-31">
+      <select id="evSel" class="ev-sel"></select>
+      <div class="note ev-note" id="evNote" style="display:none"></div>
+    </div>
+    <div class="grp"><label>距離比例</label>
+      <div class="seg" id="modeSeg"><button data-m="learn" class="on">易讀（壓縮）</button><button data-m="real">真實距離</button></div>
+    </div>
+    <div class="grp hide-m"><label>顯示</label>
+      <div class="seg"><button class="tg on" id="tgOrbit">軌道</button><button class="tg on" id="tgLabel">名稱</button><button class="tg on" id="tgComet">彗星</button><button class="tg on" id="tgAnim">✨ 動畫</button><button class="tg" id="tgToday">回到今天</button></div>
+    </div>
+    <div class="note" id="scaleNote"></div>
+  </aside>
+
+  <aside class="sim-panel glass p-right" id="info"></aside>
+
+  <div class="zoom-btns">
+    <button class="nav-btn" id="zIn" aria-label="放大">＋</button>
+    <button class="nav-btn" id="zOut" aria-label="縮小">－</button>
+    <button class="nav-btn" id="zReset" aria-label="回到全貌" title="回到全貌">⌂</button>
+  </div>
+  <nav class="bar-bottom glass" id="chips" aria-label="選擇天體"></nav>
+</div>
+</div>
+
+<script src="cosmos/cosmos.js"></script>
+<script src="cosmos/astro.js"></script>
+<script>
+(function(){
+'use strict';
+/* ---------- 資料 ---------- */
+// a: 軌道半長軸(AU)  P: 公轉週期(天)  L0: J2000 平黃經(度)  c: 顏色
+var BODIES=[
+ {id:'sun',n:'太陽',type:'恆星',c:['#fff7d6','#ffd36b','#ff8a2a'],page:'planet/planet_sun.html',
+  tag:'整個太陽系的光與熱，都來自它。',stats:[['直徑','1,392,000 km'],['表面溫度','約 5,500 °C'],['占太陽系質量','99.86 %'],['年齡','約 46 億年']],cmp:109,
+  fun:'太陽的體積可以塞進約 130 萬個地球。'},
+ {id:'mercury',n:'水星',type:'岩石行星',a:.387,P:87.97,L0:252.25,c:['#d9d4cc','#9c958b','#5c564f'],r:4.5,page:'planet/planet_merc.html',
+  tag:'最小、離太陽最近，一年只有 88 天。',stats:[['距太陽','0.39 AU'],['公轉一圈','88 天'],['自轉一天','59 個地球日'],['直徑','4,879 km'],['衛星','0 顆'],['平均溫度','約 167 °C'],['陽光抵達','約 3 分鐘']],cmp:.38,
+  fun:'沒有大氣保溫，白天可超過 400 °C，夜晚低到 −180 °C。'},
+ {id:'venus',n:'金星',type:'岩石行星',a:.723,P:224.7,L0:181.98,c:['#fff0c2','#e8c070','#a77a32'],r:7,page:'planet/planet_venus.html',
+  tag:'比水星更熱，濃厚的雲把熱量鎖在地表。',stats:[['距太陽','0.72 AU'],['公轉一圈','225 天'],['自轉一天','243 個地球日'],['直徑','12,104 km'],['衛星','0 顆'],['地表溫度','約 465 °C'],['陽光抵達','約 6 分鐘']],cmp:.95,
+  fun:'金星自轉比公轉還慢，而且方向相反，太陽在那裡是西升東落。'},
+ {id:'earth',n:'地球',type:'岩石行星',a:1,P:365.25,L0:100.46,c:['#9fd0ff','#3b82d6','#16397a'],r:7.5,page:'planet/planet_earth.html',
+  tag:'目前已知唯一有生命的星球。',stats:[['距太陽','1 AU（約 1.5 億 km）'],['公轉一圈','365.25 天'],['自轉一天','24 小時'],['直徑','12,742 km'],['衛星','1 顆（月球）'],['平均溫度','約 15 °C'],['陽光抵達','約 8.3 分鐘']],cmp:1,
+  fun:'1 AU 就是地球到太陽的距離，是天文學最常用的「尺」。'},
+ {id:'mars',n:'火星',type:'岩石行星',a:1.524,P:686.98,L0:355.45,c:['#ffb08a','#d9623b','#7c2d16'],r:5.5,page:'planet/planet_mars.html',
+  tag:'表面的鐵鏽讓它呈現紅色，是探測器最常拜訪的鄰居。',stats:[['距太陽','1.52 AU'],['公轉一圈','687 天'],['自轉一天','24 時 37 分'],['直徑','6,779 km'],['衛星','2 顆'],['平均溫度','約 −65 °C'],['陽光抵達','約 12.7 分鐘']],cmp:.53,
+  fun:'火星上有太陽系最高的火山：奧林帕斯山，約 22 公里高。'},
+ {id:'jupiter',n:'木星',type:'氣態巨行星',a:5.203,P:4332.6,L0:34.4,c:['#f3dcb8','#c99a62','#7a5430'],r:16,page:'planet/planet_jupiter.html',
+  tag:'最大的行星，質量是其他行星總和的 2.5 倍。',stats:[['距太陽','5.2 AU'],['公轉一圈','11.9 年'],['自轉一天','約 10 小時'],['直徑','139,820 km'],['已知衛星','95 顆（持續增加）'],['雲頂溫度','約 −110 °C'],['陽光抵達','約 43 分鐘']],cmp:10.97,
+  fun:'大紅斑是一場已持續數百年的巨大風暴，比地球還大。'},
+ {id:'saturn',n:'土星',type:'氣態巨行星',a:9.537,P:10759,L0:49.94,c:['#fbeccb','#d9b878','#8a6a33'],r:13,ring:true,page:'planet/planet_saturn.html',
+  tag:'擁有最壯觀的行星環，密度比水還小。',stats:[['距太陽','9.5 AU'],['公轉一圈','29.5 年'],['自轉一天','約 10.7 小時'],['直徑','116,460 km'],['已知衛星','274 顆（持續增加）'],['雲頂溫度','約 −140 °C'],['陽光抵達','約 1.3 小時']],cmp:9.14,
+  fun:'土星環主要由冰塊組成，寬達數十萬公里，卻薄到只有約十公尺到數百公尺。'},
+ {id:'uranus',n:'天王星',type:'冰巨星',a:19.19,P:30688,L0:313.23,c:['#e0fbff','#8fd8e6','#3f8fa3'],r:10,ring:'thin',page:'planet/planet_uranus.html',
+  tag:'躺著公轉的冰巨星，自轉軸傾斜約 98 度。',stats:[['距太陽','19.2 AU'],['公轉一圈','84 年'],['自轉一天','約 17 小時'],['直徑','50,724 km'],['已知衛星','29 顆（持續增加）'],['雲頂溫度','約 −195 °C'],['陽光抵達','約 2.7 小時']],cmp:3.98,
+  fun:'因為「躺著轉」，天王星的極地會連續約 42 年白天、42 年黑夜。'},
+ {id:'neptune',n:'海王星',type:'冰巨星',a:30.07,P:60190,L0:304.88,c:['#b8c8ff','#4a6ee0','#1a2d8f'],r:10,page:'planet/planet_neptune.html',
+  tag:'最遠的行星，風速是太陽系之冠。',stats:[['距太陽','30.1 AU'],['公轉一圈','165 年'],['自轉一天','約 16 小時'],['直徑','49,244 km'],['已知衛星','16 顆'],['雲頂溫度','約 −200 °C'],['陽光抵達','約 4.2 小時']],cmp:3.86,
+  fun:'海王星 2011 年才剛完整繞太陽一圈（自 1846 年被發現起算）。'}
+];
+var BY={}; BODIES.forEach(function(b){BY[b.id]=b;});
+var PL=BODIES.filter(function(b){return b.a;});
+var CO=[
+ {id:'halley',comet:1,n:'哈雷彗星',type:'週期彗星',c:['#eaf4ff','#9fd0ff','#5a8fd0'],tag:'約每 76 年回來一次，是最有名的彗星。',stats:[['軌道週期','約 76 年'],['近日點','0.59 AU'],['遠日點','約 35 AU'],['上次近日點','1986-02-09'],['下次近日點','2061-07-28']],fun:'目前它位在海王星軌道外側，接近最遠點；回到太陽附近時會長出明顯的彗尾。'},
+ {id:'encke',comet:1,n:'恩克彗星',type:'短週期彗星',c:['#eaf4ff','#9fd0ff','#5a8fd0'],tag:'週期最短的彗星之一，只要約 3.3 年。',stats:[['軌道週期','約 3.3 年'],['近日點','0.34 AU'],['遠日點','約 4.1 AU'],['上次近日點','2023-10-22']],fun:'它的軌道在水星與木星之間，每隔幾年就回到太陽附近一次。'},
+ {id:'c67p',comet:1,n:'67P 彗星',type:'木星族彗星',c:['#eaf4ff','#9fd0ff','#5a8fd0'],tag:'羅賽塔號探測的彗星。',stats:[['軌道週期','約 6.4 年'],['近日點','1.24 AU'],['遠日點','約 5.7 AU'],['上次近日點','2021-11-02']],fun:'2014 年歐洲的羅賽塔號環繞它，菲萊登陸器還登上了彗核，是人類第一次在彗星表面著陸。'}
+];
+CO.forEach(function(c){BY[c.id]=c;c.orb=ASTRO.cometOrbit(c.id,160);});
+var BELT={id:'belt',n:'小行星帶',type:'小行星區',page:'planet/planet_asteroid.html',
+  tag:'火星與木星之間，數百萬顆岩石天體環繞太陽。',stats:[['位置','約 2.2 – 3.2 AU'],['最大天體','穀神星（矮行星）'],['總質量','不到月球的 5 %'],['天體密度','其實很稀疏']],
+  fun:'電影裡擠滿隕石的畫面是誇張的，真實的小行星帶彼此相距非常遠。'};
+
+/* ---------- 狀態 ---------- */
+var cv=document.getElementById('sim'),ctx=cv.getContext('2d'),stage=document.getElementById('stage');
+var W=0,H=0,dpr=1,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var S={comet:true,mode:'learn',speed:30,sim:0,zoom:1,tz:1,px:0,py:0,tpx:0,tpy:0,sel:null,follow:null,orbit:true,label:true,hover:null,guide:true};
+var J2000=Date.UTC(2000,0,1,12),today0=Date.now();
+var hits=[],ptr={},drag=null,lastT=0;
+// 小行星帶粒子
+var rocks=[];for(var i=0;i<700;i++)rocks.push({t:Math.random()*6.283,f:Math.random(),s:Math.random()*1.1+.35,a:.3+Math.random()*.5});
+var stars=[];
+
+/* ---------- 比例轉換 ---------- */
+var LN=Math.log(30.07/.387),ROUT=370;
+function radiusAU(a){ // 回傳 "基準半徑"（以 ROUT 為遠端）
+  if(S.mode==='real')return a/42*ROUT;           // 古柏帶約到 ~42 AU
+  return 52+290*Math.log(a/.387)/LN;               // 對數壓縮
+}
+function fit(){return Math.min(W,H)*.46/ROUT;}
+function sc(){return fit()*S.zoom;}
+function sizeF(){return Math.max(.75,Math.min(1.9,Math.sqrt(sc())));}
+
+/* ---------- 位置 ---------- */
+function daysNow(){return (today0-J2000)/864e5+S.sim;}
+function pos(b){
+  if(b.comet){var q=ASTRO.comet(b.id,daysNow()),rr=radiusAU(q.r)*sc();return {x:W/2+S.px+rr*Math.cos(q.lon),y:H/2+S.py-rr*Math.sin(q.lon),r:rr,th:q.lon};}
+  var th=ASTRO.helio(b.id,daysNow()).lon,r=radiusAU(b.a)*sc();
+  return {x:W/2+S.px+r*Math.cos(th),y:H/2+S.py-r*Math.sin(th),r:r,th:th};
+}
+
+/* ---------- 繪圖 ---------- */
+function resize(){
+  dpr=Math.min(devicePixelRatio||1,2);W=stage.clientWidth;H=stage.clientHeight;
+  cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+function drawSun(t){
+  var cx=W/2+S.px,cy=H/2+S.py,k=sizeF(),R=20*k*(S.mode==='real'?Math.max(.7,Math.min(1.4,S.zoom/3+.55)):1);
+  var pulse=1+.03*Math.sin(t/900);
+  ctx.save();ctx.globalCompositeOperation='lighter';
+  var g=ctx.createRadialGradient(cx,cy,R*.6,cx,cy,R*6.5*pulse);
+  g.addColorStop(0,'rgba(255,190,90,.55)');g.addColorStop(.3,'rgba(255,130,50,.16)');g.addColorStop(1,'rgba(255,100,40,0)');
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,R*6.5*pulse,0,6.283);ctx.fill();ctx.restore();
+  var c=BY.sun.c,s=ctx.createRadialGradient(cx-R*.3,cy-R*.3,R*.1,cx,cy,R);
+  s.addColorStop(0,c[0]);s.addColorStop(.55,c[1]);s.addColorStop(1,c[2]);
+  ctx.fillStyle=s;ctx.beginPath();ctx.arc(cx,cy,R,0,6.283);ctx.fill();
+  hits.push({b:BY.sun,x:cx,y:cy,r:R+6});
+}
+function drawBelt(){
+  var cx=W/2+S.px,cy=H/2+S.py,r1=radiusAU(2.2)*sc(),r2=radiusAU(3.2)*sc(),t=daysNow()/1680*6.283;
+  ctx.save();
+  var sel=S.sel==='belt'||S.hover==='belt';
+  for(var i=0;i<rocks.length;i++){var q=rocks[i],r=r1+(r2-r1)*q.f,a=q.t+t,x=cx+r*Math.cos(a),y=cy-r*Math.sin(a);
+    ctx.fillStyle='rgba(205,200,190,'+(sel?q.a+.25:q.a)+')';ctx.fillRect(x,y,q.s*Math.min(1.6,sizeF()),q.s*Math.min(1.6,sizeF()));}
+  ctx.restore();
+  var m=(r1+r2)/2,ang=-Math.PI/3.4;
+  hits.push({b:BELT,x:cx+m*Math.cos(ang),y:cy+m*Math.sin(ang),r:Math.max(16,(r2-r1)/2)});
+  if(S.label&&r2-r1>14){ctx.font='500 11px '+getComputedStyle(document.body).fontFamily;ctx.fillStyle='rgba(205,200,190,.65)';ctx.textAlign='center';ctx.fillText('小行星帶',cx+m*Math.cos(ang),cy+m*Math.sin(ang)-(r2-r1)/2-6);}
+}
+function drawKuiper(){
+  var cx=W/2+S.px,cy=H/2+S.py,r1=radiusAU(S.mode==='real'?30.5:34)*sc(),r2=radiusAU(S.mode==='real'?42:46)*sc();
+  ctx.save();ctx.fillStyle='rgba(160,175,255,.22)';
+  for(var i=0;i<260;i++){var q=rocks[i%rocks.length],r=r1+(r2-r1)*((i*7919%100)/100),a=i*2.399+daysNow()/9e4;
+    ctx.fillRect(cx+r*Math.cos(a),cy-r*Math.sin(a),1,1);}
+  ctx.restore();
+  if(S.label){ctx.font='11px '+getComputedStyle(document.body).fontFamily;ctx.fillStyle='rgba(160,175,255,.5)';ctx.textAlign='center';ctx.fillText('古柏帶（更遠處）',cx,cy+r2+14);}
+}
+function drawPlanet(b,p,k,sel){
+  var R=b.r*k,sx=W/2+S.px,sy=H/2+S.py;
+  // 朝向太陽的光源
+  var ang=Math.atan2(sy-p.y,sx-p.x),lx=p.x+Math.cos(ang)*R*.45,ly=p.y+Math.sin(ang)*R*.45;
+  if(b.ring){ // 後半環
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(-.35);
+    var rw=b.ring==='thin'?1.7:2.1;
+    ctx.strokeStyle=b.ring==='thin'?'rgba(200,240,250,.45)':'rgba(230,205,150,.5)';ctx.lineWidth=b.ring==='thin'?1:R*.32;
+    ctx.beginPath();ctx.ellipse(0,0,R*rw,R*rw*.3,0,Math.PI,2*Math.PI);ctx.stroke();ctx.restore();
+  }
+  if(sel){ctx.save();ctx.strokeStyle='rgba(94,234,212,'+(.5+.3*Math.sin(performance.now()/260))+')';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(p.x,p.y,R+7+2*Math.sin(performance.now()/300),0,6.283);ctx.stroke();ctx.restore();}
+  var g=ctx.createRadialGradient(lx,ly,R*.05,p.x,p.y,R*1.05);
+  g.addColorStop(0,b.c[0]);g.addColorStop(.5,b.c[1]);g.addColorStop(1,b.c[2]);
+  ctx.save();ctx.shadowColor=b.c[1];ctx.shadowBlur=R*1.1;ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,R,0,6.283);ctx.fill();ctx.restore();
+  // 夜側暗影
+  var sh=ctx.createRadialGradient(lx,ly,R*.7,p.x-Math.cos(ang)*R*.4,p.y-Math.sin(ang)*R*.4,R*1.25);
+  sh.addColorStop(0,'rgba(0,0,10,0)');sh.addColorStop(1,'rgba(0,0,12,.55)');
+  ctx.fillStyle=sh;ctx.beginPath();ctx.arc(p.x,p.y,R,0,6.283);ctx.fill();
+  if(b.id==='jupiter'){ctx.save();ctx.beginPath();ctx.arc(p.x,p.y,R,0,6.283);ctx.clip();ctx.strokeStyle='rgba(120,80,40,.28)';ctx.lineWidth=R*.14;
+    for(var i=-2;i<=2;i++){ctx.beginPath();ctx.moveTo(p.x-R,p.y+i*R*.36);ctx.lineTo(p.x+R,p.y+i*R*.36);ctx.stroke();}ctx.restore();}
+  if(b.ring===true){ // 前半環
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(-.35);ctx.strokeStyle='rgba(235,212,160,.75)';ctx.lineWidth=R*.32;
+    ctx.beginPath();ctx.ellipse(0,0,R*2.1,R*2.1*.3,0,0,Math.PI);ctx.stroke();ctx.restore();
+  }
+}
+function drawComets(){
+  if(!S.comet)return;var sx=W/2+S.px,sy=H/2+S.py,k=sizeF();
+  CO.forEach(function(c){
+    ctx.strokeStyle='rgba(160,205,255,.24)';ctx.lineWidth=1;ctx.setLineDash([2,5]);ctx.beginPath();
+    c.orb.forEach(function(p,i){var r=radiusAU(p.r)*sc(),x=sx+r*Math.cos(p.lon),y=sy-r*Math.sin(p.lon);if(i)ctx.lineTo(x,y);else ctx.moveTo(x,y);});ctx.stroke();ctx.setLineDash([]);
+    var p=pos(c),q=ASTRO.comet(c.id,daysNow()),dx=p.x-sx,dy=p.y-sy,dn=Math.hypot(dx,dy)||1,ux=dx/dn,uy=dy/dn,nx=-uy,ny=ux,act=Math.max(0,Math.min(1,1-q.r/8)),tl=act*95*k;
+    if(tl>4){var g=ctx.createLinearGradient(p.x,p.y,p.x+ux*tl,p.y+uy*tl);g.addColorStop(0,'rgba(170,215,255,.8)');g.addColorStop(.3,'rgba(140,190,255,.28)');g.addColorStop(1,'rgba(120,170,255,0)');
+      ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(p.x+nx*2.2,p.y+ny*2.2);ctx.lineTo(p.x+ux*tl,p.y+uy*tl);ctx.lineTo(p.x-nx*2.2,p.y-ny*2.2);ctx.closePath();ctx.fill();
+      var ca=Math.cos(.22),sa=Math.sin(.22),vx=ux*ca-uy*sa,vy=ux*sa+uy*ca,L2=tl*.75,ex=p.x+vx*L2,ey=p.y+vy*L2,g2=ctx.createLinearGradient(p.x,p.y,ex,ey);g2.addColorStop(0,'rgba(255,235,190,.5)');g2.addColorStop(1,'rgba(255,200,130,0)');
+      ctx.fillStyle=g2;ctx.beginPath();ctx.moveTo(p.x+nx*3,p.y+ny*3);ctx.quadraticCurveTo(p.x+ux*L2*.55+nx*9,p.y+uy*L2*.55+ny*9,ex,ey);ctx.quadraticCurveTo(p.x+ux*L2*.5-nx*3,p.y+uy*L2*.5-ny*3,p.x-nx*3,p.y-ny*3);ctx.closePath();ctx.fill();}
+    var gl=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,10+10*act);gl.addColorStop(0,'rgba(190,225,255,.8)');gl.addColorStop(1,'rgba(190,225,255,0)');ctx.fillStyle=gl;ctx.beginPath();ctx.arc(p.x,p.y,10+10*act,0,6.283);ctx.fill();
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(p.x,p.y,2.2,0,6.283);ctx.fill();
+    hits.push({b:c,x:p.x,y:p.y,r:14});
+    if(S.label){ctx.font=(c.id===S.sel?'700 ':'500 ')+'12px '+getComputedStyle(document.body).fontFamily;ctx.textAlign='left';ctx.fillStyle=c.id===S.sel||S.hover===c.id?'#fff':'rgba(190,225,255,.85)';ctx.shadowColor='#000';ctx.shadowBlur=6;ctx.fillText(c.n,p.x+9,p.y-7);ctx.shadowBlur=0;}
+    if(c.id===S.sel){ctx.strokeStyle='rgba(94,234,212,.9)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(p.x,p.y,10,0,6.283);ctx.stroke();}
+  });
+}
+function frame(t){
+  var dt=Math.min(.05,(t-lastT)/1000||0);lastT=t;
+  if(S.speed&&!document.hidden)S.sim+=S.speed*dt;
+  // 鏡頭平滑
+  S.zoom+=(S.tz-S.zoom)*Math.min(1,dt*6);
+  if(S.follow){var p=pos(BY[S.follow]);S.tpx=-(p.x-W/2-S.px);S.tpy=-(p.y-H/2-S.py);S.px+=(S.tpx-S.px)*Math.min(1,dt*5);S.py+=(S.tpy-S.py)*Math.min(1,dt*5);}
+  ctx.clearRect(0,0,W,H);hits=[];
+  var cx=W/2+S.px,cy=H/2+S.py,k=sizeF();
+  if(S.orbit){
+    ctx.lineWidth=1;
+    PL.forEach(function(b){var r=radiusAU(b.a)*sc();
+      ctx.strokeStyle=b.id===S.sel?'rgba(94,234,212,.55)':'rgba(165,178,255,.17)';
+      ctx.setLineDash(b.id===S.sel?[]:[3,6]);ctx.beginPath();ctx.arc(cx,cy,r,0,6.283);ctx.stroke();});
+    ctx.setLineDash([]);
+  }
+  drawKuiper();drawBelt();drawSun(t);drawLines();
+  var drawn=PL.map(function(b){return {b:b,p:pos(b)};}).sort(function(a,c){return a.p.y-c.p.y;});
+  drawn.forEach(function(o){
+    var b=o.b,p=o.p;drawPlanet(b,p,k,b.id===S.sel);
+    if(b.id==='earth'){ // 月球
+      var mr=Math.max(b.r*k*2.1,14),mth=2*Math.PI*daysNow()/27.32,mx=p.x+mr*Math.cos(mth),my=p.y-mr*Math.sin(mth);
+      ctx.strokeStyle='rgba(255,255,255,.12)';ctx.beginPath();ctx.arc(p.x,p.y,mr,0,6.283);ctx.stroke();
+      ctx.fillStyle='#d8d8d8';ctx.beginPath();ctx.arc(mx,my,Math.max(1.6,1.9*k),0,6.283);ctx.fill();
+    }
+    hits.push({b:b,x:p.x,y:p.y,r:Math.max(b.r*k+7,12)});
+    if(S.label){
+      ctx.font=(b.id===S.sel?'700 ':'500 ')+'12.5px '+getComputedStyle(document.body).fontFamily;ctx.textAlign='left';
+      ctx.fillStyle=b.id===S.sel||S.hover===b.id?'#fff':'rgba(215,222,255,.78)';ctx.shadowColor='rgba(0,0,0,.9)';ctx.shadowBlur=6;
+      ctx.fillText(b.n,p.x+b.r*k+9,p.y+4);ctx.shadowBlur=0;
+    }
+  });
+  if(S.label){ctx.font='700 13px '+getComputedStyle(document.body).fontFamily;ctx.textAlign='center';ctx.fillStyle='rgba(255,230,170,.9)';ctx.shadowColor='#000';ctx.shadowBlur=6;ctx.fillText('太陽',cx,cy+20*k+22);ctx.shadowBlur=0;}
+  drawComets();
+  // 比例尺（真實模式）
+  if(S.mode==='real'){var au=ROUT/42*sc(),n=au>60?1:(au>12?5:(au>4?10:20));ctx.strokeStyle='rgba(255,255,255,.6)';ctx.fillStyle='rgba(255,255,255,.7)';ctx.lineWidth=1.5;
+    var bx=W/2-au*n/2,by=H-84;ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(bx+au*n,by);ctx.moveTo(bx,by-5);ctx.lineTo(bx,by+5);ctx.moveTo(bx+au*n,by-5);ctx.lineTo(bx+au*n,by+5);ctx.stroke();
+    ctx.font='11px '+getComputedStyle(document.body).fontFamily;ctx.textAlign='center';ctx.fillText(n+' AU（光走約 '+(n*8.3).toFixed(n>=10?0:1)+' 分鐘）',W/2,by-9);}
+  updateDate();
+  requestAnimationFrame(frame);
+}
+
+/* ---------- UI ---------- */
+var elDate=document.getElementById('simDate'),elDelta=document.getElementById('simDelta'),lastDateStr='';
+function updateDate(){
+  var d=new Date(today0+S.sim*864e5),s=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  if(s===lastDateStr)return;lastDateStr=s;
+  var diff=Math.round(S.sim),txt=Math.abs(diff)<1?'今天':(Math.abs(diff)>=365?(diff>0?'+':'−')+(Math.abs(diff)/365.25).toFixed(1)+' 年':(diff>0?'+':'−')+Math.abs(diff)+' 天');
+  elDate.firstChild.nodeValue=s;if(document.activeElement!==dateIn)dateIn.value=s;elDelta.textContent=txt+' · 模擬時間';
+}
+function renderInfo(){
+  var el=document.getElementById('info'),b=S.sel&&(S.sel==='belt'?BELT:BY[S.sel]);
+  if(!b){
+    if(!S.guide){el.style.display='none';return;}
+    el.style.display='';el.className='sim-panel glass p-right guide';
+    el.innerHTML='<button class="close" aria-label="關閉" id="gx">✕</button><h2>怎麼看這張圖？</h2><ul><li><b>點選</b>任何行星，查看資料並自動跟隨它</li><li><b>拖曳</b>平移，<b>滾輪／雙指</b>縮放</li><li>時間流速可調：看看水星一年有多快、海王星有多慢</li><li>切換「真實距離」，感受太陽系有多空曠</li><li>行星大小<b>放大</b>了，否則在圖上幾乎看不見</li></ul>';
+    document.getElementById('gx').onclick=function(){S.guide=false;renderInfo();};return;
+  }
+  el.style.display='';el.className='sim-panel glass p-right';
+  var h='<button class="close" aria-label="關閉" id="ix">✕</button><h2>'+b.n+' <span class="tag">'+b.type+'</span></h2><p class="tagline">'+b.tag+'</p><div class="stats-g">';
+  b.stats.forEach(function(s){h+='<div><small>'+s[0]+'</small><b>'+s[1]+'</b></div>';});h+='</div>';
+  if(b.cmp){var w=Math.min(100,Math.max(3,Math.log10(b.cmp*10)/Math.log10(1100)*100));h+='<div class="cmp">直徑是地球的 <b style="color:#fff">'+(b.cmp>=10?Math.round(b.cmp):b.cmp)+'</b> 倍<div class="bar"><i style="width:'+w+'%"></i></div></div>';}
+  h+='<p class="fun">'+b.fun+'</p>'+(b.page?'<a class="go-detail" href="'+b.page+'">查看完整介紹 →</a>':'');
+  el.innerHTML=h;document.getElementById('ix').onclick=function(){select(null);};
+}
+function select(id){
+  S.sel=id;S.follow=id&&id!=='belt'?id:null;
+  if(id&&id!=='belt'){S.tz=Math.max(S.mode==='real'?5:2.4,S.tz);}
+  if(id==='belt'){S.follow=null;S.tpx=0;S.tpy=0;S.px=0;S.py=0;S.tz=S.mode==='real'?4:1.6;}
+  if(!id){S.follow=null;}
+  document.querySelectorAll('.chip-b').forEach(function(c){c.classList.toggle('on',c.dataset.id===id);});
+  renderInfo();
+}
+function resetView(){S.follow=null;S.sel=null;S.tz=1;S.px=0;S.py=0;document.querySelectorAll('.chip-b').forEach(function(c){c.classList.remove('on');});renderInfo();}
+// 底部選單
+var chips=document.getElementById('chips');
+BODIES.concat([BELT]).concat(CO).forEach(function(b){
+  var el=document.createElement('button');el.className='chip-b';el.dataset.id=b.id;
+  var col=b.c?b.c[1]:'#cfc9bd';el.innerHTML='<i style="background:'+col+';color:'+col+'"></i>'+b.n;
+  el.onclick=function(){select(S.sel===b.id?null:b.id);if(!S.sel)resetView();};chips.appendChild(el);
+});
+// 速度 / 模式
+var tgA=document.getElementById('tgAnim');tgA.classList.toggle('on',COSMOS.anim);tgA.onclick=function(){COSMOS.setAnim(!COSMOS.anim);};COSMOS.onAnim(function(a){tgA.classList.toggle('on',a);});
+function speedUI(v){S.speed=v;document.querySelectorAll('#speedSeg button').forEach(function(x){x.classList.toggle('on',+x.dataset.v===v);});}
+COSMOS.onAnim(function(a){speedUI(a?30:0);});if(!COSMOS.anim)speedUI(0);
+document.getElementById('speedSeg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+  S.speed=+b.dataset.v;this.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b);});});
+function setNote(){document.getElementById('scaleNote').innerHTML=S.mode==='real'
+  ?'<b>真實距離：</b>各行星間距依實際 AU 等比繪製，內行星會擠在太陽旁——放大看看吧！（行星大小仍被放大）'
+  :'<b>易讀比例：</b>距離以對數壓縮，讓八大行星同時看得清楚。實際上海王星比水星遠 78 倍。';
+  document.getElementById('scaleTip').textContent=S.mode==='real'?'真實距離 · 行星大小已放大':'壓縮比例 · 方便閱讀，非實際距離';}
+document.getElementById('modeSeg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+  S.mode=b.dataset.m;this.querySelectorAll('button').forEach(function(x){x.classList.toggle('on',x===b);});setNote();
+  if(S.mode==='real'&&!S.sel){S.tz=1;}});
+setNote();
+function tgl(id,key){var b=document.getElementById(id);b.onclick=function(){S[key]=!S[key];b.classList.toggle('on',S[key]);};}
+tgl('tgOrbit','orbit');tgl('tgLabel','label');tgl('tgComet','comet');
+document.getElementById('tgToday').onclick=function(){S.sim=0;};
+document.getElementById('zIn').onclick=function(){S.tz=Math.min(60,S.tz*1.5);};
+document.getElementById('zOut').onclick=function(){S.tz=Math.max(.45,S.tz/1.5);};
+document.getElementById('zReset').onclick=resetView;
+document.addEventListener('keydown',function(e){if(e.key==='Escape')resetView();});
+
+
+/* ---------- 時間旅行 ---------- */
+var EVENTS=[
+ ['','🕰 挑一個歷史／天文事件…',[],''],
+ ['2020-12-21','木星與土星大合相（2020）',['jupiter','saturn'],'從地球看，木星和土星幾乎重疊，是近 400 年來最近的一次。看看地球、木星、土星幾乎排成一直線。'],
+ ['2003-08-27','火星大衝（2003）',['mars'],'火星與地球最接近（約 5,600 萬公里），是近六萬年來最近的一次衝，此時火星、地球、太陽幾乎成一線。'],
+ ['2025-02-28','行星連珠（2025）',['mercury','venus','mars','jupiter','saturn','uranus','neptune'],'七顆行星同時出現在太陽同一側的天空。注意：它們在空間中並沒有排成直線，只是從地球看起來在同一個方向。'],
+ ['1977-09-05','航海家 1 號發射（1977）',['jupiter','saturn'],'1970 年代末，木星、土星、天王星、海王星剛好排在同一側，讓探測器能一路「借力」飛行，這樣的機會約 175 年一次。'],
+ ['1986-02-09','哈雷彗星近日點（1986）',['halley'],'哈雷彗星最靠近太陽的時刻，距離太陽只有 0.59 AU，彗尾最明顯。當年有多個國際探測器前往迎接它，包括歐洲的喬托號。'],
+ ['1969-07-20','阿波羅 11 號登月（1969）',[],'人類首次踏上另一個天體。此刻的太陽系，行星各在自己的軌道上。'],
+ ['1846-09-23','發現海王星（1846）',['neptune'],'天文學家先用數學預測，再把望遠鏡對準天空，在預測位置附近找到了海王星。'],
+ ['2061-07-28','哈雷彗星下次回歸（2061）',['halley'],'哈雷彗星約每 76 年回來一次，上一次是 1986 年。看看它從遠方回到太陽附近，並長出彗尾。']
+];
+var evSel=document.getElementById('evSel'),dateIn=document.getElementById('dateIn'),evNote=document.getElementById('evNote');
+EVENTS.forEach(function(e,i){var o=document.createElement('option');o.value=i;o.textContent=e[1];evSel.appendChild(o);});
+S.lines=[];
+function setDate(str){var t=Date.parse(str+'T12:00:00Z');if(isNaN(t))return;S.sim=(t-today0)/864e5;S.speed=0;
+  document.querySelectorAll('#speedSeg button').forEach(function(x){x.classList.toggle('on',x.dataset.v==='0');});lastDateStr='';}
+dateIn.addEventListener('change',function(){if(dateIn.value){setDate(dateIn.value);S.lines=[];evSel.value=0;evNote.style.display='none';}});
+evSel.addEventListener('change',function(){var e=EVENTS[+evSel.value];if(!e[0]){S.lines=[];evNote.style.display='none';return;}
+  setDate(e[0]);S.lines=e[2];evNote.style.display='';evNote.textContent=e[3];S.mode='learn';document.querySelectorAll('#modeSeg button').forEach(function(x){x.classList.toggle('on',x.dataset.m==='learn');});setNote();});
+document.getElementById('tgToday').addEventListener('click',function(){S.lines=[];evSel.value=0;evNote.style.display='none';});
+function drawLines(){
+  if(!S.lines.length)return;var e=pos(BY.earth);ctx.save();ctx.setLineDash([5,6]);ctx.lineWidth=1.2;
+  S.lines.forEach(function(id){var p=pos(BY[id]),dx=p.x-e.x,dy=p.y-e.y,n=Math.hypot(dx,dy)||1;
+    ctx.strokeStyle='rgba(253,231,165,.55)';ctx.beginPath();ctx.moveTo(e.x,e.y);ctx.lineTo(e.x+dx/n*3000,e.y+dy/n*3000);ctx.stroke();});
+  ctx.restore();ctx.strokeStyle='rgba(94,234,212,.9)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(e.x,e.y,13,0,6.283);ctx.stroke();
+}
+
+/* ---------- 指標互動 ---------- */
+function hitAt(x,y){var best=null,bd=1e9;hits.forEach(function(h){var d=Math.hypot(h.x-x,h.y-y);if(d<=h.r&&d<bd){bd=d;best=h;}});return best;}
+cv.addEventListener('pointerdown',function(e){cv.setPointerCapture(e.pointerId);ptr[e.pointerId]={x:e.offsetX,y:e.offsetY};drag={x:e.offsetX,y:e.offsetY,moved:0,d0:pinch()};});
+function pinch(){var k=Object.keys(ptr);if(k.length<2)return 0;var a=ptr[k[0]],b=ptr[k[1]];return Math.hypot(a.x-b.x,a.y-b.y);}
+cv.addEventListener('pointermove',function(e){
+  var tip=document.getElementById('tip');
+  if(!ptr[e.pointerId]){var h=hitAt(e.offsetX,e.offsetY);S.hover=h?h.b.id:null;cv.style.cursor=h?'pointer':'grab';
+    if(h){tip.textContent=h.b.n;tip.style.left=e.offsetX+'px';tip.style.top=e.offsetY+'px';tip.style.opacity=1;}else tip.style.opacity=0;return;}
+  var p=ptr[e.pointerId],dx=e.offsetX-p.x,dy=e.offsetY-p.y;p.x=e.offsetX;p.y=e.offsetY;
+  if(Object.keys(ptr).length>=2){var d=pinch();if(drag.d0){S.tz=Math.max(.45,Math.min(60,S.tz*d/drag.d0));S.zoom=S.tz;}drag.d0=d;drag.moved=9;return;}
+  drag.moved+=Math.abs(dx)+Math.abs(dy);
+  if(drag.moved>4){S.px+=dx;S.py+=dy;S.follow=null;cv.classList.add('drag');document.getElementById('tip').style.opacity=0;}
+});
+function up(e){var wasTap=drag&&drag.moved<=4&&Object.keys(ptr).length===1;delete ptr[e.pointerId];cv.classList.remove('drag');
+  if(wasTap){var h=hitAt(e.offsetX,e.offsetY);if(h)select(h.b.id);else if(S.sel)resetView();}
+  if(!Object.keys(ptr).length)drag=null;}
+cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+cv.addEventListener('pointerleave',function(){document.getElementById('tip').style.opacity=0;S.hover=null;});
+cv.addEventListener('wheel',function(e){e.preventDefault();
+  var f=e.deltaY<0?1.15:1/1.15,nz=Math.max(.45,Math.min(60,S.tz*f)),r=nz/S.tz,cx=e.offsetX-W/2,cy=e.offsetY-H/2;
+  if(!S.follow){S.px=cx-(cx-S.px)*r;S.py=cy-(cy-S.py)*r;}S.tz=nz;S.zoom=nz;},{passive:false});
+cv.addEventListener('dblclick',resetView);
+
+addEventListener('resize',resize);resize();renderInfo();requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

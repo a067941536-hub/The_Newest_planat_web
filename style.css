@@ -1,0 +1,65 @@
+html, body {
+  /* 確保網頁沒有邊距和內邊距 */
+  margin: 0;
+  padding: 0;
+  /* 設定網頁的最小高度，確保可以有滾動條 (您設定的 300vh) */
+  min-height: 300vh; 
+}
+
+body {
+  /* --- 星空背景設定 --- */
+  background-image: url("images/newstarsky.png"); 
+  background-color: #000; /* 圖片載入失敗時的底色 */
+  background-size: cover; /* 圖片覆蓋整個視窗 */
+  background-position: center; /* 圖片居中 */
+  background-repeat: no-repeat; /* 圖片不重複 */
+  background-attachment: fixed; /* 🎯 關鍵：背景固定，不會隨頁面滾動 */
+  
+  /* --- 文字和版面設定 --- */
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding-top: 60px; /* 內容頂部邊距 */
+}
+
+/* --- 網頁元件樣式 --- */
+
+.selector-box {
+  /* 選擇器容器樣式：半透明背景讓星空若隱若現 */
+  background: rgba(255, 255, 255, 0.1); 
+  padding: 20px;
+  display: inline-block;
+  border-radius: 10px;
+}
+
+select {
+  /* 下拉選單樣式 */
+  padding: 10px;
+  margin: 10px;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.diagram-entry {
+  /* 圖表進入點容器樣式 */
+  text-align: center;
+  margin-top: 30px;
+}
+
+.diagram-btn {
+  /* 按鈕基礎樣式 */
+  display: inline-block;
+  padding: 12px 25px;
+  background: #4a90e2; /* 藍色背景 */
+  border-radius: 10px;
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.diagram-btn:hover {
+  /* 按鈕懸停效果 */
+  background: #1c5fa8;
+  transform: scale(1.05);
+}

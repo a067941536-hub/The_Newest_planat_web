@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="宇宙神社：依四大元素抽一支今日籤，搖籤筒、籤紙展開，輕鬆有儀式感。">
+<title>宇宙神社 — 星宇・探索</title>
+<link rel="icon" type="image/png" href="images/planeticon.png">
+<link rel="stylesheet" href="SEstyle.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="cosmos/cosmos.css">
+<link rel="stylesheet" href="cosmos/shrine.css">
+<meta name="theme-color" content="#060818">
+</head>
+<body class="shrine-page">
+<div class="wrapper">
+<header class="top-nav">
+  <a href="index.html" class="logo-link"></a>
+  <nav class="menu">
+    <a href="index.html" class="menu-item">主頁</a>
+    <a href="SEplanets.html" class="menu-item">星球</a>
+    <a href="SEother.html" class="menu-item">星座</a>
+    <a href="SEfortune.html" class="menu-item">神社</a>
+    <a href="SEabout.html" class="menu-item">關於</a>
+  </nav>
+</header>
+
+<main id="entry">
+  <span class="eyebrow">COSMIC SHRINE</span>
+  <h1><span class="grad-text">宇宙神社</span></h1>
+  <p class="lead">選一座與你最接近的元素神社，靜下心想一個問題，然後搖一支籤。結果僅供娛樂，開心就好。</p>
+  <div class="el-grid" id="elGrid"></div>
+  <div class="hist" id="hist" hidden></div>
+</main>
+
+<section id="shrine" aria-live="polite">
+  <div class="s-tools"><button id="btnBack">← 換一座神社</button><button id="btnMute" aria-pressed="false">🔔 音效</button></div>
+  <div class="scene">
+        <div class="lanterns" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="s-title"><small id="sEn"></small><h2 id="sName"></h2><p id="sSigns"></p></div>
+
+    
+    <div class="stage-area">
+      <div class="ground"></div>
+      <svg class="torii" viewBox="0 0 400 300" aria-hidden="true">
+      <path d="M14 58 Q200 26 386 58 L374 84 Q200 60 26 84 Z"/><rect x="48" y="90" width="304" height="14" rx="3"/>
+      <rect x="70" y="132" width="260" height="12" rx="3"/><rect x="92" y="100" width="22" height="196" rx="3"/><rect x="286" y="100" width="22" height="196" rx="3"/>
+    </svg>
+      <div class="box-wrap" id="box" role="button" tabindex="0" aria-label="搖晃籤筒抽籤">
+      <div class="no-tag" id="noTag"></div>
+      <svg viewBox="0 0 180 290" aria-hidden="true">
+        <defs>
+          <linearGradient id="woodG" x1="0" x2="1"><stop offset="0" stop-color="#f3e2b4"/><stop offset=".5" stop-color="#d9bd80"/><stop offset="1" stop-color="#a98446"/></linearGradient>
+          <linearGradient id="glassG" x1="0" x2="1"><stop offset="0" style="stop-color:var(--tc);stop-opacity:.55"/><stop offset=".45" style="stop-color:var(--tc);stop-opacity:.14"/><stop offset="1" style="stop-color:var(--tc);stop-opacity:.4"/></linearGradient>
+          <linearGradient id="capG" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f6df9d"/><stop offset="1" stop-color="#9a7324"/></linearGradient>
+        </defs>
+        <g id="sticks"></g>
+        <path d="M32 142 L148 142 L140 276 Q139 283 131 283 L49 283 Q41 283 40 276 Z" fill="rgba(10,12,34,.7)"/>
+        <path d="M32 142 L148 142 L140 276 Q139 283 131 283 L49 283 Q41 283 40 276 Z" fill="url(#glassG)" stroke="var(--tc)" stroke-width="1.6"/>
+        <g stroke="var(--tc)" stroke-opacity=".28" stroke-width="1"><line x1="62" y1="146" x2="60" y2="278"/><line x1="90" y1="146" x2="90" y2="278"/><line x1="118" y1="146" x2="120" y2="278"/></g>
+        <rect x="26" y="132" width="128" height="18" rx="7" fill="url(#capG)"/><rect x="34" y="272" width="112" height="14" rx="6" fill="url(#capG)"/>
+        <rect x="60" y="172" width="60" height="86" rx="9" fill="rgba(6,8,26,.85)" stroke="#e8c981" stroke-width="1.4"/>
+        <text x="90" y="232" text-anchor="middle" font-size="42" font-weight="700" fill="#fde7a5" font-family="Noto Sans TC,serif">籤</text>
+        <circle cx="90" cy="190" r="3" fill="var(--tc)"/>
+      </svg>
+    </div>
+    </div>
+    <button class="shake-btn" id="btnShake">搖　籤</button>
+    <p class="s-hint" id="hint">心裡默想一個問題，然後搖一搖籤筒</p>
+  </div>
+</section>
+
+<div class="paper-wrap" id="paperWrap" role="dialog" aria-modal="true" aria-label="抽籤結果"><div class="paper" id="paper"></div></div>
+<canvas id="fx"></canvas>
+
+<footer class="bottom-footer">
+  <div class="footer-grid">
+    <div class="footer-item">DC: <span>yukixiyu</span></div>
+    <div class="footer-item">IG: <span>YukixiYu</span></div>
+    <div class="footer-item">Gmail: <span>b067941536@gmail.com</span></div>
+  </div>
+  <p class="footer-note">籤文內容純屬娛樂，不作為任何決策依據</p>
+</footer>
+</div>
+<script src="cosmos/shrine-data.js"></script>
+<script src="cosmos/shrine.js"></script>
+<script src="cosmos/cosmos.js"></script>
+</body>
+</html>

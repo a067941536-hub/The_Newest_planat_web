@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="仙女座星系 M31：離銀河系最近的大型星系。互動星系模型、距離尺度與銀河碰撞時間軸。">
+<title>仙女座星系 M31 — 星宇・探索</title>
+<link rel="icon" type="image/png" href="images/planeticon.png">
+<link rel="stylesheet" href="SEstyle.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="cosmos/cosmos.css">
+<link rel="stylesheet" href="cosmos/galaxy.css">
+<meta name="theme-color" content="#060818">
+
+</head>
+<body>
+<div class="wrapper">
+<header class="top-nav">
+  <a href="index.html" class="logo-link"></a>
+  <nav class="menu">
+    <a href="index.html" class="menu-item">主頁</a>
+    <a href="SEplanets.html" class="menu-item active">星球</a>
+    <a href="SEother.html" class="menu-item">星座</a>
+    <a href="SEfortune.html" class="menu-item">神社</a>
+    <a href="SEabout.html" class="menu-item">關於</a>
+  </nav>
+</header>
+
+<main class="content-area">
+<div class="main-container">
+
+  <div class="crumb"><a href="SEplanets.html">← 星系地圖</a><span>/</span><span>仙女座星系</span></div>
+
+  <section class="gal-wrap" id="galWrap">
+    <div class="gal-title">
+      <span class="eyebrow">ANDROMEDA · M31</span>
+      <h1><span class="grad-text">仙女座星系</span></h1>
+      <p>離我們最近的大型星系，肉眼在暗夜裡就能看見它模糊的光。</p>
+    </div>
+    <div class="gal-tools"><button id="tgLab" class="on">標示</button><button id="tgSpin" class="on">自轉</button></div>
+    <canvas id="gal" aria-label="仙女座星系互動模型"></canvas>
+    <div id="gtip"></div>
+    <div class="gal-hint">拖曳旋轉 · 點選標示</div>
+  </section>
+
+  <section>
+    <div class="pois" id="pois"></div>
+    <div class="poi-card glass" id="poiCard"></div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>快速認識</h2><span>Key Facts</span></div>
+    <div class="grid-4">
+      <div class="fact glass"><small>距離</small><b>約 250 萬光年</b><span>光要跑 250 萬年才到得了。</span></div>
+      <div class="fact glass"><small>大小</small><b>約 22 萬光年</b><span>直徑比銀河系（約 10 萬光年）還大。</span></div>
+      <div class="fact glass"><small>恆星數量</small><b>約 1 兆顆</b><span>估計是銀河系的好幾倍。</span></div>
+      <div class="fact glass"><small>類型</small><b>旋渦星系</b><span>有明亮的核心與環狀旋臂。</span></div>
+      <div class="fact glass"><small>運動</small><b>約 110 km/s</b><span>正朝銀河系靠近，不是遠離。</span></div>
+      <div class="fact glass"><small>亮度</small><b>視星等 3.4</b><span>暗夜無光害處，肉眼可見。</span></div>
+      <div class="fact glass"><small>所在星座</small><b>仙女座</b><span>編號 M31，也叫 NGC 224。</span></div>
+      <div class="fact glass"><small>伴星系</small><b>M32・M110</b><span>最明顯的兩個小夥伴。</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>它到底有多遠？</h2><span>Distance Ladder</span></div>
+    <div class="ladder glass">
+      <p class="cap">橫條使用「對數尺度」：每多一格，距離大約是前面的 10 倍。</p>
+      <div id="ladder"></div>
+      <p class="disclaim" style="margin-top:14px">所以你今晚看到的仙女座星系，是它 <b style="color:#fff">250 萬年前</b>的樣子；那時地球上才剛出現早期人屬。</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>銀河系與仙女座的相遇</h2><span>Milkomeda</span></div>
+    <div class="merge glass">
+      <canvas id="mg"></canvas>
+      <div class="ctrl">
+        <div class="now"><b id="mgT">現在</b><span id="mgD"></span><button class="play" id="mgPlay">▶ 播放</button></div>
+        <input type="range" id="mgR" min="0" max="1000" value="0" aria-label="時間快轉">
+        <div class="ph"><span>現在</span><span>+40 億年</span><span>+60 億年</span><span>+70 億年</span></div>
+      </div>
+    </div>
+    <p class="disclaim">示意動畫：兩個星系以約 110 km/s 互相靠近。恆星之間的距離極大，合併時恆星彼此直接相撞的機率非常低。碰撞時間仍有不確定性，2025 年的新研究估計未來 100 億年內發生碰撞的機率約為一半。</p>
+  </section>
+
+  <section class="tips">
+    <div class="glass-card">
+      <h3>🔭 想自己找找看？<span class="season" id="season"></span></h3>
+      <ol>
+        <li>挑沒有光害的暗夜，等眼睛適應黑暗約 15 分鐘。</li>
+        <li>先找到天上的「W」形：<b>仙后座</b>。</li>
+        <li>沿著 W 的其中一邊往外延伸，找到一顆顆連成鉤形的亮星（仙女座）。</li>
+        <li>在其中一條「手臂」旁，會看見一小塊像棉絮的淡淡光斑，那就是 M31。</li>
+      </ol>
+    </div>
+    <div class="glass-card">
+      <h3>📍 在本星系群裡</h3>
+      <p style="color:#d3dbff;margin:0 0 8px">本星系群有超過 80 個成員，主要的三個大成員是：</p>
+      <p style="margin:0;color:var(--muted);line-height:2">① 仙女座星系 M31（最大）<br>② 銀河系（我們的家）<br>③ 三角座星系 M33（第三大）</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="next-gal glass" style="border-style:solid!important">
+      <div class="orb"></div>
+      <div><span class="eyebrow">NEXT STOP</span><h3 style="margin-top:8px">下一站：三角座星系 M33</h3><p>本星系群的第三大成員，在無光害的暗夜裡也有機會用肉眼看見。</p></div>
+      <a class="btn primary" href="triangulum.html" style="margin-left:auto">前往 M33 →</a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="bottom-footer">
+  <div class="footer-grid">
+    <div class="footer-item">DC: <span>yukixiyu</span></div>
+    <div class="footer-item">IG: <span>YukixiYu</span></div>
+    <div class="footer-item">Gmail: <span>b067941536@gmail.com</span></div>
+  </div>
+  <p class="footer-note">STAR EXPLORER · 願你在星空下好好放鬆</p>
+</footer>
+</div>
+
+<script src="cosmos/cosmos.js"></script>
+<script>
+(function(){
+'use strict';
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* ====== 資料 ====== */
+var POI=[
+ {id:'core',n:'核心與黑洞',tag:'M31*',x:0,y:0,r:.07,
+  p:['仙女座星系的中心擠滿古老的紅黃色恆星，中央有一顆約 1 億多倍太陽質量的超大質量黑洞。','核心其實有兩個亮點，被認為是一個舊星系被吞併後的遺跡。'],kv:[['黑洞質量','約 1.4 億倍太陽'],['核心顏色','偏黃（老年恆星）']]},
+ {id:'arms',n:'旋臂與星環',tag:'Star ring',x:.45,y:-.12,r:.1,
+  p:['年輕的藍白色恆星和粉紅色的氫氣雲分布在旋臂與一圈明顯的「星環」上，那裡正在誕生新恆星。','這個環距中心約 10 萬光年的一半，可能是過去與別的星系擦撞留下的痕跡。'],kv:[['環的位置','距核心約 5 萬光年'],['恆星誕生','每年約 1 顆太陽質量']]},
+ {id:'m32',n:'M32 伴星系',tag:'矮橢圓星系',x:.14,y:.22,r:.06,
+  p:['M32 小而緊密，幾乎只有老恆星，是仙女座星系最靠近的伴星系，看起來像貼在主星系旁。','它很可能曾被仙女座星系的引力「剝掉」外圍，才變得這麼小。'],kv:[['大小','約 6,500 光年'],['恆星數','約 30 億顆']]},
+ {id:'m110',n:'M110 伴星系',tag:'矮橢圓星系',x:-.7,y:.3,r:.1,
+  p:['M110 比 M32 大也更鬆散，在望遠鏡裡看起來像一團橢圓形的淡光。','它還保有少量氣體與塵埃，有微弱的新恆星形成。'],kv:[['大小','約 2 萬光年'],['位置','在 M31 的西北方']]}
+];
+/* ====== 星系模型 ====== */
+var cv=document.getElementById('gal'),ctx=cv.getContext('2d'),wrap=document.getElementById('galWrap');
+var W,H,dpr,R,stars=[];
+var G={pa:-.6,inc:1.33,spin:(window.COSMOS?COSMOS.anim:true),lab:true,sel:'core',hover:null,t:0,mx:0,my:0,tmx:0,tmy:0};
+function rnd(){return Math.random();}
+function gauss(){return (rnd()+rnd()+rnd()+rnd()-2)/.58;}
+(function build(){
+  var N=reduce?4500:9500;
+  for(var i=0;i<N;i++){
+    var k=rnd(),s;
+    if(k<.2){ // 核球
+      var r=Math.abs(gauss())*.07,th=rnd()*6.283;
+      s={r:r,th:th,c:[255,222,165],a:.35+rnd()*.5,s:.6+rnd()*1.2,z:gauss()*.03};
+    }else if(k<.88){ // 盤面＋旋臂
+      var r=-Math.log(1-rnd()*.96)*.28+.05;if(r>1)r=rnd();
+      var arm=Math.floor(rnd()*2),pitch=.2,th=Math.log(r/.05)/Math.tan(pitch)*.55+arm*Math.PI+gauss()*(.22+r*.12);
+      var ring=Math.exp(-Math.pow((r-.52)/.07,2));
+      var c=rnd()<.25+ring*.5?[255,150+rnd()*60|0,205]:[185+rnd()*30|0,205+rnd()*25|0,255];
+      if(r<.2)c=[255,225-(r*200)|0,175];
+      s={r:r,th:th,c:c,a:.18+rnd()*.5+ring*.2,s:.5+rnd()*1.1,z:gauss()*.012};
+    }else{ // 暈
+      var r=.3+rnd()*.85,th=rnd()*6.283;
+      s={r:r,th:th,c:[210,190,255],a:.06+rnd()*.14,s:.5+rnd()*.8,z:gauss()*.2};
+    }
+    stars.push(s);
+  }
+})();
+function resize(){dpr=Math.min(devicePixelRatio||1,2);W=wrap.clientWidth;H=wrap.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);R=Math.min(W*.47,H*1.28);}
+function proj(x,y,z){ // 盤面座標 → 螢幕
+  var ca=Math.cos(G.pa),sa=Math.sin(G.pa),rx=x*ca-y*sa,ry=x*sa+y*ca;
+  var ci=Math.cos(G.inc),si=Math.sin(G.inc);
+  return {x:W/2+(rx)*R*1.5+G.mx*18,y:H/2+(ry*ci+z*si)*R*1.5+G.my*14};
+}
+var marks=[];
+function draw(t){
+  var dt=Math.min(.05,(t-G.t)/1000||0);G.t=t;
+  G.mx+=(G.tmx-G.mx)*.05;G.my+=(G.tmy-G.my)*.05;
+  ctx.clearRect(0,0,W,H);
+  var cx=W/2+G.mx*18,cy=H/2+G.my*14;
+  // 暈
+  var gg=ctx.createRadialGradient(cx,cy,0,cx,cy,R*1.05);gg.addColorStop(0,'rgba(255,215,160,.28)');gg.addColorStop(.12,'rgba(210,170,255,.16)');gg.addColorStop(.5,'rgba(120,110,230,.07)');gg.addColorStop(1,'rgba(60,60,160,0)');
+  ctx.save();ctx.translate(cx,cy);ctx.scale(1,Math.max(.22,Math.cos(G.inc)+.12));ctx.translate(-cx,-cy);ctx.globalCompositeOperation='lighter';ctx.fillStyle=gg;ctx.beginPath();ctx.arc(cx,cy,R*1.05,0,6.283);ctx.fill();ctx.restore();
+  ctx.globalCompositeOperation='lighter';
+  var spin=G.spin&&!reduce?dt:0;
+  for(var i=0;i<stars.length;i++){
+    var s=stars[i];
+    if(spin)s.th+=spin*.11/Math.pow(.12+s.r,.7);
+    var p=proj(Math.cos(s.th)*s.r,Math.sin(s.th)*s.r,s.z);
+    ctx.fillStyle='rgba('+s.c[0]+','+s.c[1]+','+s.c[2]+','+Math.min(1,s.a*1.5)+')';
+    ctx.fillRect(p.x,p.y,s.s*1.25,s.s*1.25);
+  }
+  // 核心光暈
+  var c0=proj(0,0,0),cg=ctx.createRadialGradient(c0.x,c0.y,0,c0.x,c0.y,R*.2);
+  cg.addColorStop(0,'rgba(255,240,205,.95)');cg.addColorStop(.18,'rgba(255,205,140,.5)');cg.addColorStop(1,'rgba(255,170,100,0)');
+  ctx.fillStyle=cg;ctx.beginPath();ctx.arc(c0.x,c0.y,R*.2,0,6.283);ctx.fill();
+  // 伴星系
+  drawDwarf(POI[2],.55,1.15,0);drawDwarf(POI[3],1.6,.7,-.5);
+  ctx.globalCompositeOperation='source-over';
+  // 標示
+  marks=[];
+  POI.forEach(function(o){
+    var p=o.id==='core'?c0:(o.id==='arms'?proj(Math.cos(1.1)*.52,Math.sin(1.1)*.52,0):dwarfPos(o));
+    marks.push({o:o,x:p.x,y:p.y,hr:Math.max(18,o.r*R*.55)});
+    if(!G.lab&&G.sel!==o.id)return;
+    var on=G.sel===o.id,h=G.hover===o.id,pr=on?1+.2*Math.sin(t/300):1;
+    ctx.strokeStyle=on?'rgba(94,234,212,.95)':(h?'rgba(255,255,255,.85)':'rgba(190,200,255,.45)');ctx.lineWidth=on?1.8:1.2;
+    ctx.beginPath();ctx.arc(p.x,p.y,(on?15:11)*pr,0,6.283);ctx.stroke();
+    ctx.font='500 12px '+getComputedStyle(document.body).fontFamily;ctx.textAlign='left';ctx.fillStyle=on||h?'#fff':'rgba(215,222,255,.75)';ctx.shadowColor='#000';ctx.shadowBlur=6;
+    ctx.fillText(o.n.replace(' 伴星系',''),p.x+20,p.y+4);ctx.shadowBlur=0;
+  });
+  requestAnimationFrame(draw);
+}
+function dwarfPos(o){var c=proj(0,0,0);return {x:c.x+o.x*R*.85,y:c.y+o.y*R*.85};}
+function drawDwarf(o,rx,ry,rot){
+  var p=dwarfPos(o),sz=o.r*R*(o.id==='m32'?1.0:2.1);
+  ctx.save();ctx.translate(p.x,p.y);ctx.rotate(rot);ctx.scale(rx,ry*(o.id==='m32'?1:.62));
+  var g=ctx.createRadialGradient(0,0,0,0,0,sz);g.addColorStop(0,'rgba(255,230,190,'+(o.id==='m32'?.85:.38)+')');g.addColorStop(.5,'rgba(255,200,150,'+(o.id==='m32'?.22:.14)+')');g.addColorStop(1,'rgba(255,190,140,0)');
+  ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,0,sz,0,6.283);ctx.fill();ctx.restore();
+}
+/* 互動 */
+var drag=null,tip=document.getElementById('gtip');
+function pick(x,y){var b=null,bd=1e9;marks.forEach(function(m){var d=Math.hypot(m.x-x,m.y-y);if(d<m.hr&&d<bd){bd=d;b=m;}});return b;}
+cv.addEventListener('pointerdown',function(e){cv.setPointerCapture(e.pointerId);drag={x:e.offsetX,y:e.offsetY,pa:G.pa,inc:G.inc,moved:0};});
+cv.addEventListener('pointermove',function(e){
+  G.tmx=(e.offsetX/W-.5)*2;G.tmy=(e.offsetY/H-.5)*2;
+  if(drag){var dx=e.offsetX-drag.x,dy=e.offsetY-drag.y;drag.moved=Math.max(drag.moved,Math.abs(dx)+Math.abs(dy));
+    if(drag.moved>4){G.pa=drag.pa+dx*.008;G.inc=Math.max(.9,Math.min(1.5,drag.inc-dy*.004));cv.classList.add('drag');tip.style.opacity=0;}return;}
+  var m=pick(e.offsetX,e.offsetY);G.hover=m?m.o.id:null;cv.style.cursor=m?'pointer':'grab';
+  if(m){tip.textContent=m.o.n;tip.style.left=e.offsetX+'px';tip.style.top=e.offsetY+'px';tip.style.opacity=1;}else tip.style.opacity=0;
+});
+cv.addEventListener('pointerup',function(e){cv.classList.remove('drag');if(drag&&drag.moved<=4){var m=pick(e.offsetX,e.offsetY);if(m)setPoi(m.o.id);}drag=null;});
+cv.addEventListener('pointerleave',function(){G.tmx=0;G.tmy=0;G.hover=null;tip.style.opacity=0;});
+document.getElementById('tgLab').onclick=function(){G.lab=!G.lab;this.classList.toggle('on',G.lab);};
+COSMOS.onAnim(function(v){G.spin=v;document.getElementById('tgSpin').classList.toggle('on',v);});document.getElementById('tgSpin').classList.toggle('on',G.spin);document.getElementById('tgSpin').onclick=function(){G.spin=!G.spin;this.classList.toggle('on',G.spin);};
+/* 資訊卡 */
+var pois=document.getElementById('pois'),card=document.getElementById('poiCard');
+POI.forEach(function(o){var b=document.createElement('button');b.className='poi';b.dataset.id=o.id;b.textContent=o.n;b.onclick=function(){setPoi(o.id);};pois.appendChild(b);});
+function setPoi(id){G.sel=id;var o=POI.filter(function(x){return x.id===id;})[0];
+  pois.querySelectorAll('.poi').forEach(function(b){b.classList.toggle('on',b.dataset.id===id);});
+  var h='<h3>'+o.n+' <span class="tag" style="font-size:.72rem;padding:3px 10px;border-radius:99px;border:1px solid var(--line-strong);color:var(--teal);font-family:var(--font)">'+o.tag+'</span></h3>';
+  o.p.forEach(function(t){h+='<p>'+t+'</p>';});h+='<div class="kv">';o.kv.forEach(function(k){h+='<span>'+k[0]+'：<b>'+k[1]+'</b></span>';});h+='</div>';card.innerHTML=h;}
+setPoi('core');
+addEventListener('resize',resize);resize();requestAnimationFrame(draw);
+
+/* ====== 距離尺 ====== */
+var L=[['月球',4.1e-8,'光走 1.3 秒'],['太陽',1.58e-5,'光走 8.3 分鐘'],['海王星',4.8e-4,'光走 4.2 小時'],['最近的恆星',4.25,'4.25 光年'],['銀河系直徑',1e5,'約 10 萬光年'],['仙女座星系',2.5e6,'約 250 萬光年']];
+var ld=document.getElementById('ladder');
+L.forEach(function(r,i){
+  var w=(Math.log10(r[1])+8)/(Math.log10(3e6)+8)*100;
+  var d=document.createElement('div');d.className='rung'+(i===L.length-1?' big':'');
+  d.innerHTML='<span class="nm">'+r[0]+'</span><div class="tr"><i data-w="'+w.toFixed(1)+'"></i></div><span class="lt">'+r[2]+'</span>';ld.appendChild(d);
+});
+var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.querySelectorAll('i').forEach(function(b,i){setTimeout(function(){b.style.width=b.dataset.w+'%';},i*140);});io.disconnect();}});},{threshold:.3});
+io.observe(ld);
+
+/* ====== 銀河碰撞示意 ====== */
+var mg=document.getElementById('mg'),mx=mg.getContext('2d'),MW,MH,mp=[];
+var rg=document.getElementById('mgR'),T=0,playing=false;
+(function(){var n=reduce?500:1300;
+  for(var g=0;g<2;g++)for(var i=0;i<n;i++){var r=Math.pow(rnd(),.6)*1,th=rnd()*6.283;mp.push({g:g,r:r,th:th,w:.9/(.2+r),dx:gauss()*.6,dy:gauss()*.6,c:g?[255,205,150]:[150,190,255],s:.6+rnd()*1.2,a:.25+rnd()*.6});}})();
+function mresize(){var d=Math.min(devicePixelRatio||1,2);MW=mg.clientWidth;MH=mg.clientHeight;mg.width=MW*d;mg.height=MH*d;mx.setTransform(d,0,0,d,0,0);}
+var PH=[[0,'現在','兩個星系相距約 250 萬光年，正在互相靠近。'],[.18,'約 +20 億年','距離持續縮短，星系外圍開始受到彼此引力影響。'],[.4,'約 +40 億年','第一次接近：兩個星系的盤面開始被拉扯、變形。'],[.62,'約 +60 億年','核心互相環繞，長長的星流（潮汐尾）被甩出。'],[.85,'約 +70 億年','逐漸合併成一個巨大的橢圓星系，暱稱「Milkomeda」。']];
+function mdraw(t){
+  mx.clearRect(0,0,MW,MH);mx.globalCompositeOperation='lighter';
+  var e=T<.5?2*T*T:1-Math.pow(-2*T+2,2)/2; // ease
+  var sep=(1-Math.min(1,e*1.25))*MW*.3+(e>.8?0:0); // 兩中心距離的一半
+  var inter=Math.max(0,Math.min(1,(e-.35)/.5)); // 交互作用強度
+  var sz=Math.min(MW*.13,MH*.36);
+  var st=Math.min(1,Math.max(0,(e-.8)/.2));
+  for(var i=0;i<mp.length;i++){
+    var p=mp[i];p.th+=.0035*p.w*(reduce?0:1);
+    var gx=(p.g?1:-1)*sep, rr=p.r*sz*(1+inter*.4*Math.sin(p.th*2+i)*.5)*(1-st*.25);
+    var x=Math.cos(p.th)*rr,y=Math.sin(p.th)*rr*(.38+inter*.55);
+    // 合併後轉為橢球
+    x+=inter*p.dx*sz*.9;y+=inter*p.dy*sz*.55;
+    // 潮汐尾
+    if(inter>0&&p.r>.75)x+=(p.g?1:-1)*inter*sz*(p.r-.75)*3*(1-st);
+    var X=MW/2+gx+x,Y=MH/2+y+(p.g?-1:1)*(1-e)*MH*.05;
+    var col=p.c;if(st>0)col=[255,(205+30*st)|0,(150+60*st)|0];
+    mx.fillStyle='rgba('+col[0]+','+col[1]+','+col[2]+','+p.a+')';mx.fillRect(X,Y,p.s,p.s);
+  }
+  [[-1,'rgba(150,190,255,'],[1,'rgba(255,205,150,']].forEach(function(o){
+    var gx=MW/2+o[0]*sep,gy=MH/2,gr=mx.createRadialGradient(gx,gy,0,gx,gy,sz*.45);gr.addColorStop(0,o[1]+(.75-st*.2)+')');gr.addColorStop(1,o[1]+'0)');mx.fillStyle=gr;mx.beginPath();mx.arc(gx,gy,sz*.45,0,6.283);mx.fill();});
+  mx.globalCompositeOperation='source-over';
+  if(sep>MW*.1){mx.font='500 12px '+getComputedStyle(document.body).fontFamily;mx.textAlign='center';mx.fillStyle='rgba(215,222,255,.8)';mx.fillText('銀河系',MW/2-sep,MH-14);mx.fillText('仙女座星系',MW/2+sep,MH-14);}
+  if(playing){T=Math.min(1,T+.0009);rg.value=T*1000;if(T>=1){playing=false;btn.textContent='↺ 重播';}setPhase();}
+  requestAnimationFrame(mdraw);
+}
+var btn=document.getElementById('mgPlay');
+function setPhase(){var ph=PH[0];PH.forEach(function(p){if(T>=p[0])ph=p;});document.getElementById('mgT').textContent=ph[1];document.getElementById('mgD').textContent=ph[2];}
+rg.addEventListener('input',function(){T=rg.value/1000;playing=false;btn.textContent='▶ 播放';setPhase();});
+btn.onclick=function(){if(T>=1){T=0;}playing=!playing;btn.textContent=playing?'⏸ 暫停':'▶ 播放';};
+addEventListener('resize',mresize);mresize();setPhase();requestAnimationFrame(mdraw);
+/* 季節提示 */
+var m=new Date().getMonth()+1,se=document.getElementById('season');
+se.textContent=(m>=9&&m<=12)?'現在正是最佳觀測季':((m>=1&&m<=2)?'冬季傍晚仍可觀測':'此季節較難看到');
+})();
+</script>
+</body>
+</html>

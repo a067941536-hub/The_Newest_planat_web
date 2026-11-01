@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="大麥哲倫雲 LMC：銀河系最大的伴星系。蜘蛛星雲、SN 1987A、與小麥哲倫雲的關係。">
+<title>大麥哲倫雲 LMC — 星宇・探索</title>
+<link rel="icon" type="image/png" href="images/planeticon.png">
+<link rel="stylesheet" href="SEstyle.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="cosmos/cosmos.css">
+<link rel="stylesheet" href="cosmos/galaxy.css">
+<meta name="theme-color" content="#060818">
+</head>
+<body>
+<div class="wrapper">
+<header class="top-nav">
+  <a href="index.html" class="logo-link"></a>
+  <nav class="menu">
+    <a href="index.html" class="menu-item">主頁</a>
+    <a href="SEplanets.html" class="menu-item active">星球</a>
+    <a href="SEother.html" class="menu-item">星座</a>
+    <a href="SEfortune.html" class="menu-item">神社</a>
+    <a href="SEabout.html" class="menu-item">關於</a>
+  </nav>
+</header>
+<main class="content-area">
+<div class="main-container">
+
+  <div class="crumb"><a href="SEplanets.html">← 星系地圖</a><span>/</span><span>大麥哲倫雲</span></div>
+
+  <section class="gal-wrap" id="galWrap">
+    <div class="gal-title">
+      <span class="eyebrow">LARGE MAGELLANIC CLOUD</span>
+      <h1><span class="grad-text">大麥哲倫雲</span></h1>
+      <p>銀河系最大的伴星系，南半球夜空中一朵肉眼可見的「雲」。</p>
+    </div>
+    <div class="gal-tools"><button id="tgLab" class="on">標示</button><button id="tgSpin" class="on">自轉</button></div>
+    <canvas id="gal" aria-label="大麥哲倫雲互動模型"></canvas>
+    <div id="gtip"></div>
+    <div class="gal-hint">拖曳旋轉 · 點選標示</div>
+  </section>
+
+  <section>
+    <div class="pois" id="pois"></div>
+    <div class="poi-card glass" id="poiCard"></div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>快速認識</h2><span>Key Facts</span></div>
+    <div class="grid-4">
+      <div class="fact glass"><small>距離</small><b>約 16 萬光年</b><span>是離銀河系最近的大型伴星系之一。</span></div>
+      <div class="fact glass"><small>大小</small><b>約 1.4 萬光年</b><span>可見主體的直徑，外圍的恆星分布更廣。</span></div>
+      <div class="fact glass"><small>恆星數量</small><b>約 300 億顆</b><span>只有銀河系的十分之一左右。</span></div>
+      <div class="fact glass"><small>類型</small><b>不規則矮星系</b><span>帶有一根明顯的中央棒，稱為「麥哲倫型」。</span></div>
+      <div class="fact glass"><small>亮度</small><b>視星等 0.9</b><span>在南半球暗夜裡，肉眼就像一團明亮的雲。</span></div>
+      <div class="fact glass"><small>所在星座</small><b>劍魚座・山案座</b><span>靠近南天極，屬於南半球的天空。</span></div>
+      <div class="fact glass"><small>與銀河系</small><b>互相繞行</b><span>它被銀河系的引力牽動，並拖出長長的氣體流。</span></div>
+      <div class="fact glass"><small>特色</small><b>恆星工廠</b><span>擁有蜘蛛星雲，是本星系群最活躍的恆星形成區。</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>和銀河系、仙女座比一比</h2><span>Size Comparison</span></div>
+    <div class="ladder glass">
+      <div class="cmp-h">直徑（萬光年）</div>
+      <div class="cmp-bars" id="cmpD"></div>
+      <div class="cmp-h" style="margin-top:22px">恆星數量（億顆，估計值）</div>
+      <div class="cmp-bars" id="cmpS"></div>
+      <p class="disclaim" style="margin-top:16px">各項數字為常見估計值，不同研究的結果會有差異；銀河系恆星數常見範圍為 1000–4000 億顆，圖中取中間值。</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>在銀河系身邊的位置</h2><span>Neighbors</span></div>
+    <div class="ladder glass">
+      <svg class="lgmap" viewBox="0 0 640 260" role="img" aria-label="銀河系與麥哲倫雲示意圖">
+        <defs><radialGradient id="lg1"><stop offset="0" stop-color="#fff3cf"/><stop offset="1" stop-color="#8b7cf6" stop-opacity="0"/></radialGradient></defs>
+        <path d="M120 150 C 220 220, 300 210, 380 190" fill="none" stroke="rgba(94,234,212,.35)" stroke-width="10" stroke-linecap="round" stroke-dasharray="1 12"/>
+        <text x="250" y="238" text-anchor="middle" style="fill:#5eead4">麥哲倫流（拖在後面的氣體）</text>
+        <circle cx="120" cy="120" r="46" fill="url(#lg1)"/><circle cx="120" cy="120" r="5" fill="#fff"/><text x="120" y="190" text-anchor="middle">銀河系</text>
+        <line x1="120" y1="120" x2="380" y2="190" stroke="rgba(165,178,255,.4)" stroke-dasharray="4 5"/><text x="258" y="146" text-anchor="middle">約 16 萬光年</text>
+        <ellipse cx="380" cy="190" rx="22" ry="14" fill="url(#lg1)" transform="rotate(-25 380 190)"/><circle cx="380" cy="190" r="3.5" fill="#fde7a5"/><text x="380" y="224" text-anchor="middle" style="fill:#fde7a5;font-weight:700">大麥哲倫雲</text>
+        <ellipse cx="470" cy="214" rx="12" ry="8" fill="url(#lg1)"/><circle cx="470" cy="214" r="2.5" fill="#fff"/><text x="470" y="240" text-anchor="middle">小麥哲倫雲</text>
+      </svg>
+      <p class="disclaim">示意圖，非精確比例。兩朵麥哲倫雲彼此相距約 7.5 萬光年，並由氣體橋相連。</p>
+    </div>
+  </section>
+
+  <section class="tips">
+    <div class="glass-card">
+      <h3>🔭 想親眼看到它？</h3>
+      <ol>
+        <li>大麥哲倫雲位於天球南極附近，要到<b>南半球</b>或約北緯 20 度以南才看得到。</li>
+        <li>台灣（約北緯 22–25 度）幾乎看不到，南部也只能在極好的條件下擦邊。</li>
+        <li>到澳洲、紐西蘭、智利等地，在無光害的暗夜抬頭就能看到一團明亮的雲。</li>
+        <li>用雙筒望遠鏡可以看到蜘蛛星雲的蛛網狀輪廓。</li>
+      </ol>
+    </div>
+    <div class="glass-card">
+      <h3>📜 名字的由來</h3>
+      <p style="color:#d3dbff;margin:0 0 8px">「麥哲倫雲」以航海家麥哲倫命名。1519–1522 年他的船隊首次環球航行，隨行記錄者詳細描寫了南半球夜空中這兩朵「雲」。其實，南半球的原住民與阿拉伯天文學家更早就注意到它們。</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="next-gal glass" style="border-style:solid!important">
+      <div class="orb"></div>
+      <div><span class="eyebrow">NEXT STOP</span><h3 style="margin-top:8px">下一站：小麥哲倫雲 SMC</h3><p>大麥哲倫雲的小夥伴，也是人類量出宇宙距離的起點之一。</p></div>
+      <a class="btn primary" href="smc.html" style="margin-left:auto">前往 SMC →</a>
+    </div>
+  </section>
+
+</div>
+</main>
+<footer class="bottom-footer">
+  <div class="footer-grid">
+    <div class="footer-item">DC: <span>yukixiyu</span></div>
+    <div class="footer-item">IG: <span>YukixiYu</span></div>
+    <div class="footer-item">Gmail: <span>b067941536@gmail.com</span></div>
+  </div>
+  <p class="footer-note">STAR EXPLORER · 願你在星空下好好放鬆</p>
+</footer>
+</div>
+<script src="cosmos/cosmos.js"></script>
+<script>
+(function(){
+'use strict';
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var POI=[
+ {id:'core',n:'中央棒',tag:'麥哲倫型的標誌',x:-.05,y:.02,
+  p:['大麥哲倫雲雖然是不規則的矮星系，卻有一根明顯的恆星棒貫穿中央，所以被分類為「棒狀麥哲倫型」。','它的旋轉中心和恆星棒的中心並不重合，說明這個星系曾被外力拉扯變形。'],kv:[['類型','SB(s)m'],['外觀','不對稱、帶棒']]},
+ {id:'tarantula',n:'蜘蛛星雲',tag:'30 Doradus',x:.58,y:-.3,
+  p:['蜘蛛星雲是本星系群中已知最活躍的恆星形成區，寬度超過 1,000 光年，規模遠大於我們熟悉的獵戶座大星雲。','核心的 R136 星團裡，有已知質量最大的恆星，其中最重的約是太陽的 200 倍上下。'],kv:[['距離','約 16 萬光年'],['寬度','超過 1,000 光年']]},
+ {id:'sn1987a',n:'SN 1987A',tag:'超新星',x:.44,y:-.08,
+  p:['1987 年 2 月 23 日，大麥哲倫雲裡一顆藍超巨星爆炸，成為近 400 年來離我們最近、肉眼可見的超新星。','它同時釋放的中微子也被地球上的偵測器接收到，是第一次偵測到來自太陽以外的中微子，開啟了「中微子天文學」。'],kv:[['爆發日期','1987 年 2 月 23 日'],['距離','約 16.8 萬光年']]},
+ {id:'bridge',n:'麥哲倫橋',tag:'氣體橋',x:-.82,y:.5,
+  p:['大、小麥哲倫雲之間有一條由氣體組成的「橋」相連，兩者彼此的引力把氣體從彼此身上拉扯出來。','更長的「麥哲倫流」則像一條尾巴，拖在它們身後，橫跨天空上百度。'],kv:[['麥哲倫雲間距','約 7.5 萬光年'],['氣體流長度','橫跨天空約 200°']]}
+];
+var cv=document.getElementById('gal'),ctx=cv.getContext('2d'),wrap=document.getElementById('galWrap');
+var W,H,dpr,R,stars=[];
+var G={pa:.25,inc:.55,spin:(window.COSMOS?COSMOS.anim:true),lab:true,sel:'core',hover:null,t:0,mx:0,my:0,tmx:0,tmy:0};
+function rnd(){return Math.random();}
+function gauss(){return (rnd()+rnd()+rnd()+rnd()-2)/.58;}
+(function build(){
+  var N=reduce?4000:8200;
+  for(var i=0;i<N;i++){
+    var k=rnd(),x,y,c,a,sz,z=gauss()*.02;
+    if(k<.34){var u=gauss()*.5,v=gauss()*.12,ang=-.6;x=u*Math.cos(ang)-v*Math.sin(ang);y=u*Math.sin(ang)+v*Math.cos(ang);c=[255,225,180];a=.3+rnd()*.5;sz=.6+rnd()*1.1;}
+    else if(k<.66){x=gauss()*.5-.1;y=gauss()*.42;c=rnd()<.25?[255,150,205]:[175,205,255];a=.15+rnd()*.45;sz=.5+rnd()*1.1;}
+    else if(k<.8){x=.58+gauss()*.12;y=-.3+gauss()*.08;c=rnd()<.6?[255,130,190]:[180,200,255];a=.3+rnd()*.5;sz=.6+rnd()*1.2;} // 蜘蛛星雲
+    else if(k<.9){var cc=(i%7)*.9,rx=Math.cos(cc)*.45,ry=Math.sin(cc)*.35;x=rx+gauss()*.14;y=ry+gauss()*.12;c=[190,205,255];a=.2+rnd()*.4;sz=.6+rnd();}
+    else{x=gauss()*.85;y=gauss()*.7;c=[205,195,255];a=.05+rnd()*.1;sz=.5+rnd()*.7;z=gauss()*.15;}
+    var r=Math.sqrt(x*x+y*y),th=Math.atan2(y,x);
+    stars.push({r:r,th:th,c:c,a:a,s:sz,z:z});
+  }
+})();
+function resize(){dpr=Math.min(devicePixelRatio||1,2);W=wrap.clientWidth;H=wrap.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);R=Math.min(W*.4,H*.78);}
+function proj(x,y,z){
+  var ca=Math.cos(G.pa),sa=Math.sin(G.pa),rx=x*ca-y*sa,ry=x*sa+y*ca,ci=Math.cos(G.inc),si=Math.sin(G.inc);
+  return {x:W/2+rx*R*1.5+G.mx*16,y:H/2+(ry*ci+z*si)*R*1.5+G.my*12};
+}
+var marks=[];
+function draw(t){
+  var dt=Math.min(.05,(t-G.t)/1000||0);G.t=t;G.mx+=(G.tmx-G.mx)*.05;G.my+=(G.tmy-G.my)*.05;
+  ctx.clearRect(0,0,W,H);ctx.globalCompositeOperation='lighter';
+  var cx=W/2+G.mx*16,cy=H/2+G.my*12,gg=ctx.createRadialGradient(cx,cy,0,cx,cy,R*1.1);
+  gg.addColorStop(0,'rgba(255,230,200,.2)');gg.addColorStop(.4,'rgba(140,130,240,.09)');gg.addColorStop(1,'rgba(60,60,160,0)');
+  ctx.save();ctx.translate(cx,cy);ctx.scale(1,Math.max(.3,Math.cos(G.inc)));ctx.translate(-cx,-cy);ctx.fillStyle=gg;ctx.beginPath();ctx.arc(cx,cy,R*1.1,0,6.283);ctx.fill();ctx.restore();
+  var sp=G.spin&&!reduce?dt:0;
+  for(var i=0;i<stars.length;i++){var s=stars[i];if(sp)s.th+=sp*.035/Math.pow(.2+s.r,.5);
+    var p=proj(Math.cos(s.th)*s.r,Math.sin(s.th)*s.r,s.z);ctx.fillStyle='rgba('+s.c[0]+','+s.c[1]+','+s.c[2]+','+Math.min(1,s.a*1.5)+')';ctx.fillRect(p.x,p.y,s.s*1.25,s.s*1.25);}
+  var c0=proj(0,0,0),cg=ctx.createRadialGradient(c0.x,c0.y,0,c0.x,c0.y,R*.16);cg.addColorStop(0,'rgba(255,240,215,.8)');cg.addColorStop(1,'rgba(255,200,150,0)');
+  ctx.fillStyle=cg;ctx.beginPath();ctx.arc(c0.x,c0.y,R*.16,0,6.283);ctx.fill();
+  // NGC 604 光暈
+  var n=proj(POI[1].x*.9,POI[1].y*.9,0),ng=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,R*.13);ng.addColorStop(0,'rgba(255,120,190,.7)');ng.addColorStop(1,'rgba(255,120,190,0)');
+  ctx.fillStyle=ng;ctx.beginPath();ctx.arc(n.x,n.y,R*.13,0,6.283);ctx.fill();
+  ctx.globalCompositeOperation='source-over';
+  marks=[];
+  POI.forEach(function(o){
+    var p=o.id==='core'?c0:proj(o.x*.9,o.y*.9,0);marks.push({o:o,x:p.x,y:p.y,hr:22});
+    if(!G.lab&&G.sel!==o.id)return;
+    var on=G.sel===o.id,h=G.hover===o.id,pr=on?1+.2*Math.sin(t/300):1;
+    ctx.strokeStyle=on?'rgba(94,234,212,.95)':(h?'rgba(255,255,255,.85)':'rgba(190,200,255,.45)');ctx.lineWidth=on?1.8:1.2;
+    ctx.beginPath();ctx.arc(p.x,p.y,(on?15:11)*pr,0,6.283);ctx.stroke();
+    ctx.font='500 12px '+getComputedStyle(document.body).fontFamily;ctx.textAlign='left';ctx.fillStyle=on||h?'#fff':'rgba(215,222,255,.75)';ctx.shadowColor='#000';ctx.shadowBlur=6;ctx.fillText(o.n,p.x+20,p.y+4);ctx.shadowBlur=0;
+  });
+  requestAnimationFrame(draw);
+}
+var drag=null,tip=document.getElementById('gtip');
+function pick(x,y){var b=null,bd=1e9;marks.forEach(function(m){var d=Math.hypot(m.x-x,m.y-y);if(d<m.hr&&d<bd){bd=d;b=m;}});return b;}
+cv.addEventListener('pointerdown',function(e){cv.setPointerCapture(e.pointerId);drag={x:e.offsetX,y:e.offsetY,pa:G.pa,inc:G.inc,moved:0};});
+cv.addEventListener('pointermove',function(e){
+  G.tmx=(e.offsetX/W-.5)*2;G.tmy=(e.offsetY/H-.5)*2;
+  if(drag){var dx=e.offsetX-drag.x,dy=e.offsetY-drag.y;drag.moved=Math.max(drag.moved,Math.abs(dx)+Math.abs(dy));if(drag.moved>4){G.pa=drag.pa+dx*.008;G.inc=Math.max(.15,Math.min(1.1,drag.inc+dy*.004));cv.classList.add('drag');tip.style.opacity=0;}return;}
+  var m=pick(e.offsetX,e.offsetY);G.hover=m?m.o.id:null;cv.style.cursor=m?'pointer':'grab';
+  if(m){tip.textContent=m.o.n;tip.style.left=e.offsetX+'px';tip.style.top=e.offsetY+'px';tip.style.opacity=1;}else tip.style.opacity=0;
+});
+cv.addEventListener('pointerup',function(e){cv.classList.remove('drag');if(drag&&drag.moved<=4){var m=pick(e.offsetX,e.offsetY);if(m)setPoi(m.o.id);}drag=null;});
+cv.addEventListener('pointerleave',function(){G.tmx=0;G.tmy=0;G.hover=null;tip.style.opacity=0;});
+document.getElementById('tgLab').onclick=function(){G.lab=!G.lab;this.classList.toggle('on',G.lab);};
+COSMOS.onAnim(function(v){G.spin=v;document.getElementById('tgSpin').classList.toggle('on',v);});document.getElementById('tgSpin').classList.toggle('on',G.spin);document.getElementById('tgSpin').onclick=function(){G.spin=!G.spin;this.classList.toggle('on',G.spin);};
+var pois=document.getElementById('pois'),card=document.getElementById('poiCard');
+POI.forEach(function(o){var b=document.createElement('button');b.className='poi';b.dataset.id=o.id;b.textContent=o.n;b.onclick=function(){setPoi(o.id);};pois.appendChild(b);});
+function setPoi(id){G.sel=id;var o=POI.filter(function(x){return x.id===id;})[0];
+  pois.querySelectorAll('.poi').forEach(function(b){b.classList.toggle('on',b.dataset.id===id);});
+  var h='<h3>'+o.n+' <span class="tag" style="font-size:.72rem;padding:3px 10px;border-radius:99px;border:1px solid var(--line-strong);color:var(--teal);font-family:var(--font)">'+o.tag+'</span></h3>';
+  o.p.forEach(function(t){h+='<p>'+t+'</p>';});h+='<div class="kv">';o.kv.forEach(function(k){h+='<span>'+k[0]+'：<b>'+k[1]+'</b></span>';});h+='</div>';card.innerHTML=h;}
+setPoi('core');addEventListener('resize',resize);resize();requestAnimationFrame(draw);
+
+/* 比較長條 */
+function bars(id,rows,max){var el=document.getElementById(id);
+  rows.forEach(function(r){var d=document.createElement('div');d.className='cmp-row'+(r[3]?' me':'');d.innerHTML='<span>'+r[0]+'</span><div class="tr"><i data-w="'+(r[1]/max*100).toFixed(1)+'"></i></div><small>'+r[2]+'</small>';el.appendChild(d);});}
+bars('cmpD',[['銀河系',10,'約 10'],['仙女座 M31',22,'約 22'],['大麥哲倫雲',1.4,'約 1.4',1]],22);
+bars('cmpS',[['銀河系',2500,'約 2,500'],['仙女座 M31',10000,'約 10,000'],['大麥哲倫雲',300,'約 300',1]],10000);
+var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.querySelectorAll('i[data-w]').forEach(function(b,i){setTimeout(function(){b.style.width=b.dataset.w+'%';},i*160);});io.unobserve(e.target);}});},{threshold:.3});
+['cmpD','cmpS'].forEach(function(id){io.observe(document.getElementById(id));});
+
+})();
+</script>
+</body>
+</html>

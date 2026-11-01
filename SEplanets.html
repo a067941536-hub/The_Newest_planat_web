@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星球探索 - 完整系統</title>
+    <link rel="stylesheet" href="SEstyle.css">
+    <style>
+        /* --- 核心修改：轉場遮罩設定 --- */
+        #page-transition {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #0a0515, #1a0b35, #0a0515, #0d1a3a, #0a0515, #0a122a);
+            background-size: 400% 400%;
+            z-index: 10001;
+            pointer-events: none;
+            display: none; /* 預設隱藏，確保進場無動畫 */
+            opacity: 0;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1.2s cubic-bezier(0.3, 0.5, 0.4, 1);
+            animation: nebulaGentleFlow 25s linear infinite; 
+        }
+
+        #page-transition.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        @keyframes nebulaGentleFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .loader-text {
+            color: #66b3ff;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 8px;
+            text-shadow: 0 0 15px rgba(102, 179, 255, 0.6);
+            animation: blink 2.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* 畫布特效層 */
+        #magic-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        body {
+            cursor: crosshair;
+            background-color: #0a0515;
+            overflow-x: hidden;
+        }
+
+        .wrapper {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="cosmos/cosmos.css"><meta name="theme-color" content="#060818">
+</head>
+<body>
+
+    <div id="page-transition">
+        <div class="loader-text">WARPING...</div>
+    </div>
+
+    <canvas id="magic-canvas"></canvas>
+
+    <div class="wrapper">
+        <header class="top-nav">
+            <a href="index.html" class="logo-link"></a>
+            <nav class="menu">
+                <a href="index.html" class="menu-item">主頁</a>
+                <a href="SEplanets.html" class="menu-item">星球</a>
+                <a href="SEother.html" class="menu-item">星座</a>
+                <a href="SEfortune.html" class="menu-item">神社</a>
+                <a href="SEabout.html" class="menu-item">關於</a>
+            </nav>
+        </header>
+
+        <main class="content-area">
+            <div id="galaxy-menu" class="gmap">
+                <div class="gcard glass" onclick="showSolarDetail()" role="link" tabindex="0" onkeydown="if(event.key==='Enter')showSolarDetail()">
+                    <h2 class="g-name">太陽系</h2>
+                    <div class="g-model"><div class="solar-model">
+                            <div class="sun-core"></div>
+                            <div class="orb orb-mercury"><div class="p-dot"></div></div>
+                            <div class="orb orb-earth"><div class="p-dot"></div></div>
+                            <div class="asteroid-ring"></div>
+                        </div></div>
+                    <p class="g-sub">8 大行星 · 我們的家</p><span class="g-go">進入 →</span>
+                </div>
+                <div class="gcard glass" onclick="location.href='andromeda.html'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='andromeda.html'">
+                    <h2 class="g-name">仙女座星系</h2>
+                    <div class="g-model"><div class="andro-mini"><i></i><i></i><b></b></div></div>
+                    <p class="g-sub">M31 · 250 萬光年</p><span class="g-go">進入 →</span>
+                </div>
+                <div class="gcard glass" onclick="location.href='triangulum.html'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='triangulum.html'">
+                    <h2 class="g-name">三角座星系</h2>
+                    <div class="g-model"><div class="m33-mini"><i></i><i></i><i></i><b></b></div></div>
+                    <p class="g-sub">M33 · 270 萬光年</p><span class="g-go">進入 →</span>
+                </div>
+                <div class="gcard glass" onclick="location.href='lmc.html'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='lmc.html'">
+                    <h2 class="g-name">大麥哲倫雲</h2>
+                    <div class="g-model"><div class="lmc-open"><i></i><b></b></div></div>
+                    <p class="g-sub">LMC · 16 萬光年</p><span class="g-go">進入 →</span>
+                </div>
+                <div class="gcard glass" onclick="location.href='smc.html'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='smc.html'">
+                    <h2 class="g-name">小麥哲倫雲</h2>
+                    <div class="g-model"><div class="smc-open"><i></i><b></b></div></div>
+                    <p class="g-sub">SMC · 20 萬光年</p><span class="g-go">進入 →</span>
+                </div>
+                <div class="gcard glass is-locked" aria-disabled="true">
+                    <span class="g-badge">待開發</span>
+                    <h2 class="g-name">巴納德星系</h2>
+                    <div class="g-model"><div class="lmc-model"><i></i><i></i><b></b></div></div>
+                    <p class="g-sub">NGC 6822 · 160 萬光年</p><span class="g-go">敬請期待</span>
+                </div>
+            </div>
+
+            <a class="journey-banner glass" id="journeyBanner" href="universe.html">
+                <span class="jb-ico">🔭</span>
+                <span><b>宇宙尺度之旅</b><small>從地球一路縮小到星系團，也能放大看清每一顆行星</small></span>
+                <span class="jb-go">開始旅程 →</span>
+            </a>
+
+            <a class="journey-banner glass" id="nebBanner" href="nebula.html" style="margin-top:14px">
+                <span class="jb-ico">🌫️</span>
+                <span><b>星雲示意圖</b><small>即時渲染獵戶座大星雲、創生之柱、蟹狀星雲與馬頭星雲</small></span>
+                <span class="jb-go">開始欣賞 →</span>
+            </a>
+
+            <div id="solar-detail-grid" class="planet-grid-container" style="display:none;">
+                <div class="grid-header">
+                    <button class="back-btn" onclick="hideSolarDetail()">← 返回</button>
+                    <h2 style="color:#66b3ff;">太陽系成員全覽</h2>
+                </div>
+
+                <div class="planet-grid">
+                    <a href="planet/planet_sun.html" class="planet-card">
+                        <div class="card-viz"><div class="sun-card-viz"></div></div>
+                        <div class="card-info"><h3>太陽</h3><p>核心恆星</p></div>
+                    </a>
+                    <a href="planet/planet_merc.html" class="planet-card">
+                        <div class="card-viz"><div class="inner-path path-merc"><div class="sphere sphere-merc"></div></div></div>
+                        <div class="card-info"><h3>水星</h3><p>最接近太陽</p></div>
+                    </a>
+                    <a href="planet/planet_venus.html" class="planet-card">
+                        <div class="card-viz"><div class="inner-path path-venus"><div class="sphere sphere-venus"></div></div></div>
+                        <div class="card-info"><h3>金星</h3><p>高溫行星</p></div>
+                    </a>
+                    <a href="planet/planet_earth.html" class="planet-card">
+                        <div class="card-viz"><div class="inner-path path-earth"><div class="sphere sphere-earth"></div></div></div>
+                        <div class="card-info"><h3>地球</h3><p>我們的家園</p></div>
+                    </a>
+                    <a href="planet/planet_mars.html" class="planet-card">
+                        <div class="card-viz"><div class="inner-path path-mars"><div class="sphere sphere-mars"></div></div></div>
+                        <div class="card-info"><h3>火星</h3><p>紅色星球</p></div>
+                    </a>
+                    <a href="planet/planet_jupiter.html" class="planet-card">
+                        <div class="card-viz"><div class="inner-path path-jup"><div class="sphere sphere-jup"></div></div></div>
+                        <div class="card-info"><h3>木星</h3><p>氣態巨行星</p></div>
+                    </a>
+                    <a href="planet/planet_saturn.html" class="planet-card">
+                        <div class="card-viz"><div class="inner-path path-sat"><div class="sphere sphere-sat"></div></div></div>
+                        <div class="card-info"><h3>土星</h3><p>美麗星環</p></div>
+                    </a>
+                    <a href="planet/planet_uranus.html" class="planet-card">
+                        <div class="card-viz"><div class="inner-path path-ura"><div class="sphere sphere-ura"></div></div></div>
+                        <div class="card-info"><h3>天王星</h3><p>冰巨星</p></div>
+                    </a>
+                    <a href="planet/planet_neptune.html" class="planet-card">
+                        <div class="card-viz"><div class="inner-path path-nep"><div class="sphere sphere-nep"></div></div></div>
+                        <div class="card-info"><h3>海王星</h3><p>遠離太陽</p></div>
+                    </a>
+                    <a href="jdiagram.html" class="planet-card solar-motion-card">
+                        <div class="card-viz">
+                            <div class="mini-solar-system">
+                                <div class="mini-sun"></div>
+                                <div class="mini-orb orb-1"></div>
+                                <div class="mini-orb orb-2"></div>
+                            </div>
+                        </div>
+                        <div class="card-info"><h3>太陽系模型</h3><p>星系運動模擬</p></div>
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <footer class="bottom-footer">
+            <div class="footer-grid">
+                <div class="footer-item">DC: <span>yukixiyu</span></div>
+                <div class="footer-item">IG: <span>YukixiYu</span></div>
+                <div class="footer-item">Gmail: <span>b067941536@gmail.com</span></div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // --- 轉場動畫邏輯 (精簡即時版) ---
+        window.addEventListener('DOMContentLoaded', () => {
+            const transitionLayer = document.getElementById('page-transition');
+            
+            // 選取所有星球卡片
+            const planetCards = document.querySelectorAll('.planet-card');
+            
+            planetCards.forEach(card => {
+                card.addEventListener('click', (e) => {
+                    // 檢查連結是否有效且屬於本站
+                    if (card.href && card.href.includes(window.location.host)) {
+                        e.preventDefault();
+                        const targetUrl = card.href;
+
+                        // 顯示並觸發動畫
+                        transitionLayer.style.display = 'flex';
+                        requestAnimationFrame(() => {
+                            transitionLayer.classList.add('active');
+                        });
+
+                        setTimeout(() => {
+                            window.location.href = targetUrl;
+                        }, 1200);
+                    }
+                });
+            });
+            // 導覽列 (.menu-item) 不會被監聽到，所以會秒切換，符合需求。
+        });
+
+        // --- 特效邏輯：游標星塵與點擊星雲 (保持不變) ---
+        const canvas = document.getElementById('magic-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [], clickRipples = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        window.addEventListener('mousemove', (e) => {
+            for (let i = 0; i < 3; i++) particles.push(new Particle(e.clientX, e.clientY));
+        });
+
+        window.addEventListener('click', (e) => {
+            clickRipples.push(new Ripple(e.clientX, e.clientY));
+            for(let i=0; i<8; i++) particles.push(new Particle(e.clientX, e.clientY, true)); 
+        });
+
+        // Particle & Ripple 類別 (這裡省略，與你提供的代碼完全一致)
+        class Particle {
+            constructor(x, y, isClickStar = false) {
+                this.x = x; this.y = y; this.isClickStar = isClickStar;
+                const hue = isClickStar ? 280 : (Math.random() < 0.8 ? 50 : 280); 
+                this.color = `hsla(${hue}, 90%, 70%, `; 
+                this.size = isClickStar ? Math.random() * 4 + 2 : Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * (isClickStar ? 4 : 1.5);
+                this.speedY = isClickStar ? (Math.random() * -3 - 1) : (Math.random() * -1 - 0.2);
+                this.life = 1; this.decay = isClickStar ? 0.015 : Math.random() * 0.02 + 0.01;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if(this.isClickStar) { this.speedX *= 0.98; this.speedY *= 0.98; }
+                this.life -= this.decay; if(this.life < 0) this.life = 0;
+            }
+            draw() {
+                ctx.globalCompositeOperation = 'lighter';
+                ctx.fillStyle = this.color + this.life + ')';
+                ctx.beginPath();
+                if(this.isClickStar) {
+                    this.drawStar(ctx, this.x, this.y, 4, this.size, this.size/2);
+                } else {
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                }
+                ctx.fill();
+                ctx.globalCompositeOperation = 'source-over';
+            }
+            drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius) {
+                let rot = Math.PI / 2 * 3, step = Math.PI / spikes;
+                ctx.beginPath(); ctx.moveTo(cx, cy - outerRadius);
+                for (let i = 0; i < spikes; i++) {
+                    ctx.lineTo(cx + Math.cos(rot) * outerRadius, cy + Math.sin(rot) * outerRadius);
+                    rot += step;
+                    ctx.lineTo(cx + Math.cos(rot) * innerRadius, cy + Math.sin(rot) * innerRadius);
+                    rot += step;
+                }
+                ctx.closePath();
+            }
+        }
+
+        class Ripple {
+            constructor(x, y) {
+                this.x = x; this.y = y; this.radius = 1; this.maxRadius = 70;
+                this.color = 'hsla(280, 90%, 60%, ';
+                this.life = 1; this.decay = 0.025;
+            }
+            update() {
+                this.radius += (this.maxRadius - this.radius) * 0.1;
+                this.life -= this.decay; if(this.life < 0) this.life = 0;
+            }
+            draw() {
+                ctx.strokeStyle = this.color + this.life + ')';
+                ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.stroke();
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach((p, i) => { p.update(); p.draw(); if(p.life <= 0) particles.splice(i, 1); });
+            clickRipples.forEach((r, i) => { r.update(); r.draw(); if(r.life <= 0) clickRipples.splice(i, 1); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // 頁面切換邏輯
+        function showSolarDetail(noHash) {
+            if (!noHash && location.hash !== '#solar') history.pushState(null, '', '#solar');
+            document.getElementById('galaxy-menu').style.display = 'none';
+            document.getElementById('journeyBanner').style.display = 'none';
+            document.getElementById('nebBanner').style.display = 'none';
+            document.getElementById('solar-detail-grid').style.display = 'block';
+        }
+        function hideSolarDetail(noHash) {
+            if (!noHash && location.hash === '#solar') history.back();
+            document.getElementById('galaxy-menu').style.display = '';
+            document.getElementById('journeyBanner').style.display = '';
+            document.getElementById('nebBanner').style.display = '';
+            document.getElementById('solar-detail-grid').style.display = 'none';
+        }
+    window.addEventListener('popstate', function () { if (location.hash === '#solar') showSolarDetail(true); else hideSolarDetail(true); });
+        if (location.hash === '#solar') showSolarDetail(true);
+    </script>
+<script src="cosmos/cosmos.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>關於 — 星宇・探索</title>
+    <link rel="icon" type="image/png" href="images/planeticon.png">
+    <link rel="stylesheet" href="SEstyle.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="cosmos/cosmos.css">
+    <meta name="theme-color" content="#060818">
+</head>
+<body>
+    <div class="wrapper">
+        <header class="top-nav">
+            <a href="index.html" class="logo-link"></a>
+            <nav class="menu">
+                <a href="index.html" class="menu-item">主頁</a>
+                <a href="SEplanets.html" class="menu-item">星球</a>
+                <a href="SEother.html" class="menu-item">星座</a>
+                <a href="SEfortune.html" class="menu-item">神社</a>
+                <a href="SEabout.html" class="menu-item">關於</a>
+            </nav>
+        </header>
+
+        <main class="content-area">
+            <div class="main-container">
+                <section class="hero" style="grid-template-columns:1fr">
+                    <div>
+                        <span class="eyebrow">ABOUT THE PROJECT</span>
+                        <h1><span class="grad-text">星宇・探索</span></h1>
+                        <p>源於高中地球科學課的一個想法：課本知識很豐富，卻少了一個直觀又好看的互動平台。於是我把複雜的天文數據，做成可以慢慢逛的宇宙。</p>
+                    </div>
+                </section>
+
+                <section class="about-grid">
+                    <div class="about-card glass-card">
+                        <h3>🎯 開發背景</h3>
+                        <p>希望學習者能更輕鬆地探索太陽系、仙女座星系，並查詢黃道十二宮的資訊，把抽象的天文數據轉成具有美感與互動性的數位體驗。</p>
+                    </div>
+                    <div class="about-card glass-card">
+                        <h3>🌟 核心功能</h3>
+                        <ul>
+                            <li>星系跳轉：太陽系與仙女座星系導覽</li>
+                            <li>行星圖鑑：八大行星科學數據卡片</li>
+                            <li>星座索引：黃道十二宮與每日運勢</li>
+                            <li>即時動態：NASA 每日太空照片</li>
+                        </ul>
+                    </div>
+                    <div class="about-card glass-card">
+                        <h3>🛠️ 技術棧</h3>
+                        <div class="chips"><span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">Vanilla JS</span><span class="chip">Canvas</span><span class="chip">Web Audio</span><span class="chip">NASA APOD API</span></div>
+                        <p style="margin-top:14px">獨立完成 UI / UX 設計，實作深色宇宙主題、動態漸層與多層次佈局。</p>
+                    </div>
+                    <div class="about-card glass-card">
+                        <h3>🤖 AI 協作開發</h3>
+                        <div class="timeline">
+                            <div><b>邏輯優化</b><br><span style="color:var(--muted)">AI 協助星球運動的三角函數運算，人工調校與整合。</span></div>
+                            <div><b>生產力</b><br><span style="color:var(--muted)">自動生成大量重複元件，如 150 顆動態小行星。</span></div>
+                            <div><b>除錯測試</b><br><span style="color:var(--muted)">輔助 JS 除錯，確保跨瀏覽器穩定。</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="glass-card about-card" style="text-align:center">
+                    <h3 style="justify-content:center">📬 意見回饋</h3>
+                    <p>若你發現任何數據錯誤或有改進建議，歡迎聯絡我，這些都是珍貴的優化參考。</p>
+                    <div class="cta-row" style="justify-content:center">
+                        <a class="btn primary" href="mailto:b067941536@gmail.com">寄信給我</a>
+                        <a class="btn" href="index.html">回到首頁</a>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer class="bottom-footer">
+            <div class="footer-grid">
+                <div class="footer-item">DC: <span>yukixiyu</span></div>
+                <div class="footer-item">IG: <span>YukixiYu</span></div>
+                <div class="footer-item">Gmail: <span>b067941536@gmail.com</span></div>
+            </div>
+            <p class="footer-note">STAR EXPLORER · 願你在星空下好好放鬆</p>
+        </footer>
+    </div>
+    <script src="cosmos/cosmos.js"></script>
+</body>
+</html>

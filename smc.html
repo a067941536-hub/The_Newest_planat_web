@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="小麥哲倫雲 SMC：造父變星與宇宙距離尺的故事、NGC 346、被拉長的矮星系。">
+<title>小麥哲倫雲 SMC — 星宇・探索</title>
+<link rel="icon" type="image/png" href="images/planeticon.png">
+<link rel="stylesheet" href="SEstyle.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="cosmos/cosmos.css">
+<link rel="stylesheet" href="cosmos/galaxy.css">
+<meta name="theme-color" content="#060818">
+</head>
+<body>
+<div class="wrapper">
+<header class="top-nav">
+  <a href="index.html" class="logo-link"></a>
+  <nav class="menu">
+    <a href="index.html" class="menu-item">主頁</a>
+    <a href="SEplanets.html" class="menu-item active">星球</a>
+    <a href="SEother.html" class="menu-item">星座</a>
+    <a href="SEfortune.html" class="menu-item">神社</a>
+    <a href="SEabout.html" class="menu-item">關於</a>
+  </nav>
+</header>
+<main class="content-area">
+<div class="main-container">
+
+  <div class="crumb"><a href="SEplanets.html">← 星系地圖</a><span>/</span><span>小麥哲倫雲</span></div>
+
+  <section class="gal-wrap" id="galWrap">
+    <div class="gal-title">
+      <span class="eyebrow">SMALL MAGELLANIC CLOUD</span>
+      <h1><span class="grad-text">小麥哲倫雲</span></h1>
+      <p>大麥哲倫雲的小夥伴，也是人類量出宇宙距離的起點之一。</p>
+    </div>
+    <div class="gal-tools"><button id="tgLab" class="on">標示</button><button id="tgSpin" class="on">自轉</button></div>
+    <canvas id="gal" aria-label="小麥哲倫雲互動模型"></canvas>
+    <div id="gtip"></div>
+    <div class="gal-hint">拖曳旋轉 · 點選標示</div>
+  </section>
+
+  <section>
+    <div class="pois" id="pois"></div>
+    <div class="poi-card glass" id="poiCard"></div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>快速認識</h2><span>Key Facts</span></div>
+    <div class="grid-4">
+      <div class="fact glass"><small>距離</small><b>約 20 萬光年</b><span>比大麥哲倫雲再遠一點。</span></div>
+      <div class="fact glass"><small>大小</small><b>約 0.7 萬光年</b><span>可見主體的直徑，大麥哲倫雲的一半。</span></div>
+      <div class="fact glass"><small>恆星數量</small><b>約 30 億顆</b><span>約為銀河系的八十分之一。</span></div>
+      <div class="fact glass"><small>類型</small><b>矮不規則星系</b><span>帶有一根不明顯的棒，並向東延伸出「翼」。</span></div>
+      <div class="fact glass"><small>亮度</small><b>視星等 2.7</b><span>在南半球暗夜裡，肉眼可見一小片雲。</span></div>
+      <div class="fact glass"><small>所在星座</small><b>杜鵑座</b><span>鄰近著名的杜鵑座 47 球狀星團。</span></div>
+      <div class="fact glass"><small>環境</small><b>重元素很少</b><span>金屬量只有太陽的五分之一左右，像早期宇宙。</span></div>
+      <div class="fact glass"><small>特色</small><b>被拉長的星系</b><span>受大麥哲倫雲與銀河系拉扯，沿視線方向前後拉得很長。</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>和銀河系、大麥哲倫雲比一比</h2><span>Size Comparison</span></div>
+    <div class="ladder glass">
+      <div class="cmp-h">直徑（萬光年）</div>
+      <div class="cmp-bars" id="cmpD"></div>
+      <div class="cmp-h" style="margin-top:22px">恆星數量（億顆，估計值）</div>
+      <div class="cmp-bars" id="cmpS"></div>
+      <p class="disclaim" style="margin-top:16px">各項數字為常見估計值，不同研究的結果會有差異；銀河系恆星數常見範圍為 1000–4000 億顆，圖中取中間值。</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>在銀河系身邊的位置</h2><span>Neighbors</span></div>
+    <div class="ladder glass">
+      <svg class="lgmap" viewBox="0 0 640 260" role="img" aria-label="銀河系與麥哲倫雲示意圖">
+        <defs><radialGradient id="lg1"><stop offset="0" stop-color="#fff3cf"/><stop offset="1" stop-color="#8b7cf6" stop-opacity="0"/></radialGradient></defs>
+        <circle cx="110" cy="120" r="46" fill="url(#lg1)"/><circle cx="110" cy="120" r="5" fill="#fff"/><text x="110" y="190" text-anchor="middle">銀河系</text>
+        <line x1="110" y1="120" x2="360" y2="170" stroke="rgba(165,178,255,.35)" stroke-dasharray="4 5"/><text x="230" y="130" text-anchor="middle">約 16 萬光年</text>
+        <line x1="110" y1="120" x2="470" y2="200" stroke="rgba(94,234,212,.3)" stroke-dasharray="4 5"/><text x="300" y="215" text-anchor="middle" style="fill:#5eead4">約 20 萬光年</text>
+        <path d="M385 170 C 420 180, 440 192, 458 198" fill="none" stroke="rgba(94,234,212,.5)" stroke-width="6" stroke-linecap="round" stroke-dasharray="1 9"/>
+        <ellipse cx="360" cy="170" rx="24" ry="14" fill="url(#lg1)" transform="rotate(-25 360 170)"/><circle cx="360" cy="170" r="3.5" fill="#fde7a5"/><text x="360" y="148" text-anchor="middle">大麥哲倫雲</text>
+        <ellipse cx="478" cy="204" rx="16" ry="9" fill="url(#lg1)" transform="rotate(35 478 204)"/><circle cx="478" cy="204" r="3" fill="#fff"/><text x="478" y="238" text-anchor="middle" style="fill:#fde7a5;font-weight:700">小麥哲倫雲</text>
+      </svg>
+      <p class="disclaim">示意圖，非精確比例。兩朵麥哲倫雲由「麥哲倫橋」相連，並一起繞著銀河系運行。</p>
+    </div>
+  </section>
+
+  <section class="tips">
+    <div class="glass-card">
+      <h3>🔭 想親眼看到它？</h3>
+      <ol>
+        <li>和大麥哲倫雲一樣，小麥哲倫雲要到<b>南半球</b>或約北緯 20 度以南才看得到。</li>
+        <li>在澳洲、紐西蘭、智利等地，抬頭找杜鵑座，會看見一小塊模糊的雲。</li>
+        <li>旁邊那團明亮的球狀星團是「杜鵑座 47」，它其實在銀河系裡，離我們只有約 1.3 萬光年。</li>
+        <li>台灣看不到，但你可以在「星座星空圖」把地點切換成雪梨，看它升到天空的樣子。</li>
+      </ol>
+    </div>
+    <div class="glass-card">
+      <h3>⭐ 勒維特與宇宙的「尺」</h3>
+      <p style="color:#d3dbff;margin:0 0 8px">1912 年，天文學家亨麗埃塔・勒維特研究小麥哲倫雲裡的造父變星，發現它們「越亮、閃爍週期越長」。因為它們都在同一個星系、距離幾乎相同，這個規律才被清楚看出來。之後哈伯就是用這把尺，量出仙女座星系在銀河系之外。</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="next-gal glass" style="border-style:dashed!important">
+      <div class="orb"></div>
+      <div><span class="eyebrow">COMING SOON</span><h3 style="margin-top:8px">下一個開發：巴納德星系 NGC 6822</h3><p>本星系群裡的一個不規則矮星系，距離約 160 萬光年。開發中，敬請期待。</p></div>
+      <a class="btn" href="SEplanets.html" style="margin-left:auto">回星系地圖</a>
+    </div>
+  </section>
+
+</div>
+</main>
+<footer class="bottom-footer">
+  <div class="footer-grid">
+    <div class="footer-item">DC: <span>yukixiyu</span></div>
+    <div class="footer-item">IG: <span>YukixiYu</span></div>
+    <div class="footer-item">Gmail: <span>b067941536@gmail.com</span></div>
+  </div>
+  <p class="footer-note">STAR EXPLORER · 願你在星空下好好放鬆</p>
+</footer>
+</div>
+<script src="cosmos/cosmos.js"></script>
+<script>
+(function(){
+'use strict';
+var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+var POI=[
+ {id:'core',n:'主體與棒',tag:'矮不規則星系',x:0,y:0,
+  p:['小麥哲倫雲的主體是一條斜斜的恆星帶，被認為是一根不明顯的「棒」。','它的氣體與恆星分布都很不規則，因為正被鄰居拉扯。'],kv:[['類型','SB(s)m pec'],['恆星年齡','從非常老到非常年輕都有']]},
+ {id:'ngc346',n:'NGC 346',tag:'恆星形成區',x:-.34,y:.3,
+  p:['NGC 346 是小麥哲倫雲裡最大、最活躍的恆星形成區，內部有許多非常年輕的熱恆星，把周圍氣體照得發出粉紅色的光。','這裡的重元素很少，和早期宇宙的環境相似，是研究「遠古」恆星誕生的好地方。'],kv:[['大小','約 200 光年'],['特點','低重元素環境']]},
+ {id:'wing',n:'翼與麥哲倫橋',tag:'被拉扯出的結構',x:.82,y:.12,
+  p:['小麥哲倫雲向大麥哲倫雲的方向延伸出一個「翼」，並由麥哲倫橋把兩者的氣體相連。','這是它們在過去互相靠近、引力拉扯留下的痕跡。'],kv:[['麥哲倫橋長度','約 7.5 萬光年'],['成因','兩雲過去的近距離接觸']]},
+ {id:'cepheid',n:'造父變星',tag:'宇宙距離的「尺」',x:-.05,y:.24,
+  p:['造父變星是亮度會週期性變化的恆星。勒維特發現週期越長、本身越亮。','只要量到閃爍週期，就能知道它真正的亮度，再和看起來的亮度比較，就算出距離。'],kv:[['發現','勒維特，1912 年'],['用途','量測星系距離']]}
+];
+var cv=document.getElementById('gal'),ctx=cv.getContext('2d'),wrap=document.getElementById('galWrap');
+var W,H,dpr,R,stars=[];
+var G={pa:.25,inc:.55,spin:(window.COSMOS?COSMOS.anim:true),lab:true,sel:'core',hover:null,t:0,mx:0,my:0,tmx:0,tmy:0};
+function rnd(){return Math.random();}
+function gauss(){return (rnd()+rnd()+rnd()+rnd()-2)/.58;}
+(function build(){
+  var N=reduce?3600:7200;
+  for(var i=0;i<N;i++){
+    var k=rnd(),x,y,c,a,sz,z=gauss()*.02;
+    if(k<.42){var u=gauss()*.5,v=gauss()*.1,ang=.62;x=u*Math.cos(ang)-v*Math.sin(ang);y=u*Math.sin(ang)+v*Math.cos(ang);c=rnd()<.5?[200,220,255]:[255,225,185];a=.3+rnd()*.5;sz=.6+rnd()*1.1;}
+    else if(k<.6){x=gauss()*.4;y=gauss()*.3;c=[185,205,255];a=.15+rnd()*.4;sz=.5+rnd()*1;}
+    else if(k<.7){x=-.34+gauss()*.1;y=.3+gauss()*.08;c=rnd()<.6?[255,140,200]:[190,205,255];a=.3+rnd()*.5;sz=.6+rnd()*1.2;}
+    else if(k<.84){x=.55+Math.abs(gauss())*.3;y=.12+gauss()*.12;c=[175,200,255];a=.15+rnd()*.35;sz=.5+rnd()*.9;}
+    else{x=gauss()*.8;y=gauss()*.65;c=[205,195,255];a=.05+rnd()*.1;sz=.5+rnd()*.7;z=gauss()*.15;}
+    var r=Math.sqrt(x*x+y*y),th=Math.atan2(y,x);
+    stars.push({r:r,th:th,c:c,a:a,s:sz,z:z});
+  }
+})();
+function resize(){dpr=Math.min(devicePixelRatio||1,2);W=wrap.clientWidth;H=wrap.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);R=Math.min(W*.4,H*.78);}
+function proj(x,y,z){
+  var ca=Math.cos(G.pa),sa=Math.sin(G.pa),rx=x*ca-y*sa,ry=x*sa+y*ca,ci=Math.cos(G.inc),si=Math.sin(G.inc);
+  return {x:W/2+rx*R*1.5+G.mx*16,y:H/2+(ry*ci+z*si)*R*1.5+G.my*12};
+}
+var marks=[];
+function draw(t){
+  var dt=Math.min(.05,(t-G.t)/1000||0);G.t=t;G.mx+=(G.tmx-G.mx)*.05;G.my+=(G.tmy-G.my)*.05;
+  ctx.clearRect(0,0,W,H);ctx.globalCompositeOperation='lighter';
+  var cx=W/2+G.mx*16,cy=H/2+G.my*12,gg=ctx.createRadialGradient(cx,cy,0,cx,cy,R*1.1);
+  gg.addColorStop(0,'rgba(255,230,200,.2)');gg.addColorStop(.4,'rgba(140,130,240,.09)');gg.addColorStop(1,'rgba(60,60,160,0)');
+  ctx.save();ctx.translate(cx,cy);ctx.scale(1,Math.max(.3,Math.cos(G.inc)));ctx.translate(-cx,-cy);ctx.fillStyle=gg;ctx.beginPath();ctx.arc(cx,cy,R*1.1,0,6.283);ctx.fill();ctx.restore();
+  var sp=G.spin&&!reduce?dt:0;
+  for(var i=0;i<stars.length;i++){var s=stars[i];if(sp)s.th+=sp*.035/Math.pow(.2+s.r,.5);
+    var p=proj(Math.cos(s.th)*s.r,Math.sin(s.th)*s.r,s.z);ctx.fillStyle='rgba('+s.c[0]+','+s.c[1]+','+s.c[2]+','+Math.min(1,s.a*1.5)+')';ctx.fillRect(p.x,p.y,s.s*1.25,s.s*1.25);}
+  var c0=proj(0,0,0),cg=ctx.createRadialGradient(c0.x,c0.y,0,c0.x,c0.y,R*.16);cg.addColorStop(0,'rgba(255,240,215,.8)');cg.addColorStop(1,'rgba(255,200,150,0)');
+  ctx.fillStyle=cg;ctx.beginPath();ctx.arc(c0.x,c0.y,R*.16,0,6.283);ctx.fill();
+  // NGC 604 光暈
+  var n=proj(POI[1].x*.9,POI[1].y*.9,0),ng=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,R*.13);ng.addColorStop(0,'rgba(255,120,190,.7)');ng.addColorStop(1,'rgba(255,120,190,0)');
+  ctx.fillStyle=ng;ctx.beginPath();ctx.arc(n.x,n.y,R*.13,0,6.283);ctx.fill();
+  ctx.globalCompositeOperation='source-over';
+  marks=[];
+  POI.forEach(function(o){
+    var p=o.id==='core'?c0:proj(o.x*.9,o.y*.9,0);marks.push({o:o,x:p.x,y:p.y,hr:22});
+    if(!G.lab&&G.sel!==o.id)return;
+    var on=G.sel===o.id,h=G.hover===o.id,pr=on?1+.2*Math.sin(t/300):1;
+    ctx.strokeStyle=on?'rgba(94,234,212,.95)':(h?'rgba(255,255,255,.85)':'rgba(190,200,255,.45)');ctx.lineWidth=on?1.8:1.2;
+    ctx.beginPath();ctx.arc(p.x,p.y,(on?15:11)*pr,0,6.283);ctx.stroke();
+    ctx.font='500 12px '+getComputedStyle(document.body).fontFamily;ctx.textAlign='left';ctx.fillStyle=on||h?'#fff':'rgba(215,222,255,.75)';ctx.shadowColor='#000';ctx.shadowBlur=6;ctx.fillText(o.n,p.x+20,p.y+4);ctx.shadowBlur=0;
+  });
+  requestAnimationFrame(draw);
+}
+var drag=null,tip=document.getElementById('gtip');
+function pick(x,y){var b=null,bd=1e9;marks.forEach(function(m){var d=Math.hypot(m.x-x,m.y-y);if(d<m.hr&&d<bd){bd=d;b=m;}});return b;}
+cv.addEventListener('pointerdown',function(e){cv.setPointerCapture(e.pointerId);drag={x:e.offsetX,y:e.offsetY,pa:G.pa,inc:G.inc,moved:0};});
+cv.addEventListener('pointermove',function(e){
+  G.tmx=(e.offsetX/W-.5)*2;G.tmy=(e.offsetY/H-.5)*2;
+  if(drag){var dx=e.offsetX-drag.x,dy=e.offsetY-drag.y;drag.moved=Math.max(drag.moved,Math.abs(dx)+Math.abs(dy));if(drag.moved>4){G.pa=drag.pa+dx*.008;G.inc=Math.max(.15,Math.min(1.1,drag.inc+dy*.004));cv.classList.add('drag');tip.style.opacity=0;}return;}
+  var m=pick(e.offsetX,e.offsetY);G.hover=m?m.o.id:null;cv.style.cursor=m?'pointer':'grab';
+  if(m){tip.textContent=m.o.n;tip.style.left=e.offsetX+'px';tip.style.top=e.offsetY+'px';tip.style.opacity=1;}else tip.style.opacity=0;
+});
+cv.addEventListener('pointerup',function(e){cv.classList.remove('drag');if(drag&&drag.moved<=4){var m=pick(e.offsetX,e.offsetY);if(m)setPoi(m.o.id);}drag=null;});
+cv.addEventListener('pointerleave',function(){G.tmx=0;G.tmy=0;G.hover=null;tip.style.opacity=0;});
+document.getElementById('tgLab').onclick=function(){G.lab=!G.lab;this.classList.toggle('on',G.lab);};
+COSMOS.onAnim(function(v){G.spin=v;document.getElementById('tgSpin').classList.toggle('on',v);});document.getElementById('tgSpin').classList.toggle('on',G.spin);document.getElementById('tgSpin').onclick=function(){G.spin=!G.spin;this.classList.toggle('on',G.spin);};
+var pois=document.getElementById('pois'),card=document.getElementById('poiCard');
+POI.forEach(function(o){var b=document.createElement('button');b.className='poi';b.dataset.id=o.id;b.textContent=o.n;b.onclick=function(){setPoi(o.id);};pois.appendChild(b);});
+function setPoi(id){G.sel=id;var o=POI.filter(function(x){return x.id===id;})[0];
+  pois.querySelectorAll('.poi').forEach(function(b){b.classList.toggle('on',b.dataset.id===id);});
+  var h='<h3>'+o.n+' <span class="tag" style="font-size:.72rem;padding:3px 10px;border-radius:99px;border:1px solid var(--line-strong);color:var(--teal);font-family:var(--font)">'+o.tag+'</span></h3>';
+  o.p.forEach(function(t){h+='<p>'+t+'</p>';});h+='<div class="kv">';o.kv.forEach(function(k){h+='<span>'+k[0]+'：<b>'+k[1]+'</b></span>';});h+='</div>';card.innerHTML=h;}
+setPoi('core');addEventListener('resize',resize);resize();requestAnimationFrame(draw);
+
+/* 比較長條 */
+function bars(id,rows,max){var el=document.getElementById(id);
+  rows.forEach(function(r){var d=document.createElement('div');d.className='cmp-row'+(r[3]?' me':'');d.innerHTML='<span>'+r[0]+'</span><div class="tr"><i data-w="'+(r[1]/max*100).toFixed(1)+'"></i></div><small>'+r[2]+'</small>';el.appendChild(d);});}
+bars('cmpD',[['銀河系',10,'約 10'],['大麥哲倫雲',1.4,'約 1.4'],['小麥哲倫雲',.7,'約 0.7',1]],10);
+bars('cmpS',[['銀河系',2500,'約 2,500'],['大麥哲倫雲',300,'約 300'],['小麥哲倫雲',30,'約 30',1]],2500);
+var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.querySelectorAll('i[data-w]').forEach(function(b,i){setTimeout(function(){b.style.width=b.dataset.w+'%';},i*160);});io.unobserve(e.target);}});},{threshold:.3});
+['cmpD','cmpS'].forEach(function(id){io.observe(document.getElementById(id));});
+
+})();
+</script>
+</body>
+</html>

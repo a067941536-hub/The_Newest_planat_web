@@ -1,0 +1,757 @@
+/* --- 基礎設定 --- */
+
+* {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+
+
+html, body {
+
+    height: 100%;
+
+    font-family: 'Segoe UI', sans-serif;
+
+    color: #E0E0E0;
+
+    background-color: #050510;
+
+}
+
+
+
+.wrapper {
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-height: 100vh;
+
+    background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+
+}
+
+
+
+/* --- 導覽列 --- */
+
+.top-nav {
+
+    background-color: rgba(20, 25, 35, 0.95);
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 60px;
+
+    height: 90px;
+
+    border-bottom: 1px solid rgba(102, 179, 255, 0.3);
+
+    z-index: 1000;
+
+}
+
+
+
+.logo-img {
+
+    height: 55px;
+
+    border-radius: 50%;
+
+    border: 1px solid #66b3ff;
+
+}
+
+
+
+.menu {
+
+    flex: 1;
+
+    display: flex;
+
+    justify-content: space-around;
+
+    height: 100%;
+
+}
+
+
+
+.menu-item {
+
+    text-decoration: none;
+
+    color: #92B4F4;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 30px;
+
+    transition: 0.3s;
+
+}
+
+
+
+.menu-item:hover {
+
+    color: #ffffff;
+
+    text-shadow: 0 0 10px #66b3ff;
+
+}
+
+
+
+/* --- 內容區 --- */
+
+.content-area {
+
+    flex: 1;
+
+    display: flex;
+
+    justify-content: center;
+
+    padding: 50px 0 80px 0;
+
+}
+
+
+
+.main-container {
+
+    max-width: 1000px;
+
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 30px;
+
+}
+
+
+
+/* 公告板 */
+
+.announcement-board {
+
+    background: rgba(30, 35, 45, 0.6);
+
+    border: 1px solid rgba(102, 179, 255, 0.2);
+
+    border-radius: 30px;
+
+    height: 50px;
+
+    overflow: hidden;
+
+}
+
+
+
+.announcement-track { animation: scrollUp 10s infinite; }
+
+.news-item { height: 50px; line-height: 50px; text-align: center; color: #A0D2EB; }
+
+
+
+@keyframes scrollUp {
+
+    0%, 25% { transform: translateY(0); }
+
+    33%, 58% { transform: translateY(-50px); }
+
+    66%, 91% { transform: translateY(-100px); }
+
+    100% { transform: translateY(0); }
+
+}
+
+
+
+/* 循環看板 (修正：不再用 animation 移動，改用 scroll) */
+
+.slider-container {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 480px;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    border: 2px solid rgba(102, 179, 255, 0.2);
+
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+
+}
+
+
+
+.slider {
+
+    display: flex;
+
+    width: 100%;
+
+    height: 100%;
+
+    overflow-x: auto;
+
+    scroll-snap-type: x mandatory;
+
+    scrollbar-width: none; /* 隱藏捲軸 */
+
+    scroll-behavior: smooth;
+
+}
+
+
+
+.slider::-webkit-scrollbar { display: none; }
+
+
+
+.slide {
+
+    flex: 0 0 100%;
+
+    scroll-snap-align: start;
+
+    position: relative;
+
+}
+
+
+
+.slide img { width: 100%; height: 100%; object-fit: cover; }
+
+.slide-text {
+
+    position: absolute;
+
+    bottom: 0; width: 100%;
+
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+
+    padding: 30px; text-align: center; font-size: 1.5rem;
+
+}
+
+
+
+/* 圓點導覽 (修正：提升層級並強化顏色) */
+
+.slider-nav {
+
+    position: absolute;
+
+    bottom: 20px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    display: flex;
+
+    gap: 15px;
+
+    z-index: 10; /* 確保圓點在最上方 */
+
+}
+
+
+
+.dot {
+
+    width: 14px;
+
+    height: 14px;
+
+    background: rgba(255, 255, 255, 0.3);
+
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    border: 2px solid rgba(102, 179, 255, 0.5);
+
+    transition: 0.3s;
+
+}
+
+
+
+.dot.active {
+
+    background: #66b3ff;
+
+    box-shadow: 0 0 10px #66b3ff;
+
+    transform: scale(1.2);
+
+}
+
+
+
+/* --- Footer --- */
+
+.bottom-footer {
+
+    background-color: rgba(15, 20, 30, 0.95);
+
+    padding: 60px;
+
+    border-top: 1px solid rgba(102, 179, 255, 0.3);
+
+}
+
+
+
+.footer-grid {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px 100px;
+
+    max-width: 800px;
+
+    margin: 0 auto;
+
+}
+
+
+
+.footer-item span { color: #ffffff; margin-left: 10px; }
+
+/* --- 星球頁面專用佈局 --- */
+
+.galaxy-map-container {
+
+    width: 90%;
+
+    max-width: 1200px;
+
+    display: flex;
+
+    justify-content: space-around;
+
+    align-items: center;
+
+    gap: 50px;
+
+}
+
+
+
+.system-box {
+
+    flex: 1;
+
+    height: 500px;
+
+    background: rgba(20, 25, 35, 0.6);
+
+    border: 1px solid rgba(102, 179, 255, 0.2);
+
+    border-radius: 20px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    position: relative;
+
+    overflow: hidden;
+
+}
+
+
+
+.system-title {
+
+    position: absolute;
+
+    top: 20px;
+
+    color: #66b3ff;
+
+    letter-spacing: 2px;
+
+    font-size: 1.2rem;
+
+    text-shadow: 0 0 10px rgba(102, 179, 255, 0.5);
+
+}
+
+
+
+/* --- 太陽系動畫元件 --- */
+
+.solar-model {
+
+    position: relative;
+
+    width: 300px;
+
+    height: 300px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+}
+
+
+
+.sun-core {
+
+    width: 40px; height: 40px;
+
+    background: radial-gradient(circle, #fff, #ffcc00, #ff8800);
+
+    border-radius: 50%;
+
+    box-shadow: 0 0 30px #ffaa00;
+
+}
+
+
+
+.orb {
+
+    position: absolute;
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    border-radius: 50%;
+
+    animation: rotateOrbit linear infinite;
+
+}
+
+
+
+.p-dot {
+
+    position: absolute;
+
+    top: -5px; left: 50%;
+
+    width: 8px; height: 8px; border-radius: 50%;
+
+}
+
+
+
+/* 軌道分配 */
+
+.orb-mercury { width: 80px; height: 80px; animation-duration: 4s; }
+
+.orb-mercury .p-dot { background: #aaa; }
+
+.orb-venus { width: 120px; height: 120px; animation-duration: 7s; }
+
+.orb-venus .p-dot { background: #e3bb76; }
+
+.orb-earth { width: 160px; height: 160px; animation-duration: 10s; }
+
+.orb-earth .p-dot { background: #2271b3; }
+
+.orb-mars { width: 200px; height: 200px; animation-duration: 13s; }
+
+.orb-mars .p-dot { background: #e27b58; }
+
+
+
+/* 小行星帶 */
+
+.asteroid-ring {
+
+    position: absolute;
+
+    width: 230px; height: 230px;
+
+    border: 2px dotted rgba(255,255,255,0.15);
+
+    border-radius: 50%;
+
+    animation: rotateOrbit 30s linear infinite reverse;
+
+}
+
+
+
+.orb-jupiter { width: 280px; height: 280px; animation-duration: 20s; }
+
+.orb-jupiter .p-dot { background: #d3a567; width: 12px; height: 12px; }
+
+
+
+/* --- 仙女星系動畫元件 (旋渦效果) --- */
+
+.andromeda-model {
+
+    position: relative;
+
+    width: 300px; height: 300px;
+
+}
+
+
+
+.galaxy-center {
+
+    position: absolute;
+
+    top: 50%; left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 20px; height: 20px;
+
+    background: white; border-radius: 50%;
+
+    box-shadow: 0 0 40px 10px white;
+
+}
+
+
+
+.spiral-arms {
+
+    position: absolute;
+
+    width: 100%; height: 100%;
+
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(102, 179, 255, 0.2) 70%);
+
+    border: 2px dashed rgba(102, 179, 255, 0.1);
+
+    border-radius: 50% 20% 50% 20%; /* 營造旋渦感 */
+
+    animation: rotateOrbit 10s linear infinite;
+
+}
+
+
+
+.spiral-arms.delay {
+
+    transform: rotate(90deg);
+
+    animation-delay: -5s;
+
+}
+
+
+
+@keyframes rotateOrbit {
+
+    from { transform: rotate(0deg); }
+
+    to { transform: rotate(360deg); }
+
+}
+/* --- 佈局控制：100% 還原圖片比例 --- */
+.planet-grid-container { width: 90%; max-width: 1200px; margin: 40px auto; }
+.planet-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.planet-card { background: rgba(25, 30, 40, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 15px; height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; position: relative; }
+.planet-card:hover { background: rgba(35, 45, 60, 0.7); border-color: rgba(102, 179, 255, 0.3); }
+
+/* --- 核心修正：確保軌道與星球永遠在卡片中心 --- */
+.card-viz { width: 100%; height: 180px; position: relative; display: flex; justify-content: center; align-items: center; }
+.inner-path { position: absolute; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 50%; display: flex; justify-content: center; align-items: center; animation: rotateOrbit linear infinite; }
+.sphere { position: absolute; border-radius: 50%; transform: translate(-50%, -50%); top: 0; left: 50%; }
+
+/* --- 文字樣式 --- */
+.card-info { text-align: center; margin-top: 10px; }
+.card-info h3 { color: #66b3ff; font-size: 1.1rem; margin-bottom: 5px; font-weight: 500; }
+.card-info p { color: #778899; font-size: 0.85rem; }
+
+/* --- 星球個別數據 (精確半徑與大小) --- */
+.sun-card-viz { width: 70px; height: 70px; background: radial-gradient(circle, #fff, #ffcc00, #ff8800); border-radius: 50%; box-shadow: 0 0 40px rgba(255, 165, 0, 0.5); }
+.belt-viz { width: 100px; height: 100px; border: 1px dashed rgba(255, 255, 255, 0.2); border-radius: 50%; animation: rotateOrbit 20s linear infinite; }
+
+.path-merc { width: 50px; height: 50px; animation-duration: 4s; } .sphere-merc { width: 8px; height: 8px; background: #aaa; }
+.path-venus { width: 80px; height: 80px; animation-duration: 7s; } .sphere-venus { width: 14px; height: 14px; background: #e3bb76; }
+.path-earth { width: 110px; height: 110px; animation-duration: 10s; } .sphere-earth { width: 16px; height: 16px; background: #2271b3; box-shadow: 0 0 10px #2271b3; }
+.path-mars { width: 85px; height: 85px; animation-duration: 13s; } .sphere-mars { width: 12px; height: 12px; background: #e27b58; }
+.path-jup { width: 140px; height: 140px; animation-duration: 20s; } .sphere-jup { width: 28px; height: 28px; background: #d3a567; }
+.path-sat { width: 140px; height: 140px; animation-duration: 25s; } .sphere-sat { width: 24px; height: 24px; background: #c5ab6e; border-bottom: 3px solid #666; }
+.path-ura { width: 120px; height: 120px; animation-duration: 30s; } .sphere-ura { width: 20px; height: 20px; background: #b2dfee; }
+.path-nep { width: 120px; height: 120px; animation-duration: 35s; } .sphere-nep { width: 20px; height: 20px; background: #3f54ba; }
+/* --- 太陽系運動卡片專屬樣式 --- */
+.solar-motion-card {
+    background: rgba(30, 40, 60, 0.4); /* 稍微區分色調 */
+    border: 1px solid rgba(102, 179, 255, 0.2);
+}
+
+.mini-solar-system {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mini-sun {
+    width: 30px;
+    height: 30px;
+    background: radial-gradient(circle, #fff, #ffcc00, #ff8800);
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(255, 165, 0, 0.7);
+    z-index: 5;
+}
+
+.mini-orb {
+    position: absolute;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: rotateOrbit linear infinite;
+}
+
+/* 建立三層不同速度的軌道與行星點 */
+.mini-orb::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    background: #66b3ff;
+    border-radius: 50%;
+    transform: translateX(-50%);
+}
+
+.orb-1 { width: 60px; height: 60px; animation-duration: 4s; }
+.orb-2 { width: 95px; height: 95px; animation-duration: 9s; }
+.orb-3 { width: 130px; height: 130px; animation-duration: 15s; }
+
+/* 讓不同軌道的點顏色有區別 */
+.orb-2::after { background: #e3bb76; width: 8px; height: 8px; }
+.orb-3::after { background: #2271b3; width: 7px; height: 7px; }
+/*==============================================以下為SEplanet的板======================================================*/
+/* 星座分類進入點的視覺效果 */
+.zodiac-entrance-viz {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.golden-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 2px dashed #ffcc66; /* 金色虛線圈 */
+    border-radius: 50%;
+    animation: rotate 25s linear infinite;
+}
+
+.star-center {
+    font-size: 3rem;
+    filter: drop-shadow(0 0 10px #ffcc66);
+}
+
+/* 讓星座方塊在滑鼠移上去時有金色發光效果 */
+.system-box:hover {
+    border-color: #ffcc66;
+    box-shadow: 0 0 30px rgba(255, 204, 102, 0.2);
+    transform: translateY(-5px);
+    transition: all 0.3s ease;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+/* 基礎結構 */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /*background: #141435;*/
+}
+
+.content-area {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* 大方塊初始置中 */
+    padding: 60px 20px;
+}
+
+/* 12星座符號樣式 */
+.zodiac-symbol {
+    font-size: 3.5rem;
+    color: #ffcc66;
+    text-shadow: 0 0 15px rgba(255, 204, 102, 0.5);
+}
+
+/* 讓頁尾文字藍色強調 */
+.text-blue {
+    color: #66b3ff;
+    margin-left: 5px;
+}
+
+/* 返回按鈕樣式 */
+.back-btn {
+    background: none;
+    border: 1px solid #66b3ff;
+    color: #66b3ff;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.back-btn:hover {
+    background: rgba(102, 179, 255, 0.1);
+}
+.slide-link {
+    position: absolute; /* 絕對定位 */
+    top: 0;
+    left: 0;
+    width: 100%;       /* 撐滿寬 */
+    height: 100%;      /* 撐滿高 */
+    z-index: 100;      /* 確保在圖片和文字的最前方 */
+    display: block;
+}
+/*===================================================================星座測試===============================================*/

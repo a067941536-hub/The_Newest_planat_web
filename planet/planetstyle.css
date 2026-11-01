@@ -1,0 +1,106 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #121212; /* 深黑背景 */
+    color: #e0e0e0; /* 淺灰色文字 */
+}
+
+/* 讓主要內容居中並限制寬度 */
+header, main, footer {
+    width: 90%;
+    max-width: 960px; /* 內容最大寬度 */
+    margin: 0 auto;
+    padding: 10px 0;
+}
+
+header {
+    text-align: center;
+    padding: 20px 0;
+    border-bottom: 2px solid #333; /* 深色分割線 */
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #4CAF50; /* 科技綠色標題 */
+    margin-bottom: 5px;
+}
+
+h2 {
+    color: #90CAF9; /* 淺藍色副標題 */
+}
+
+.back-link {
+    color: #BB86FC; /* 紫色連結 */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.back-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* 星球視覺區 */
+.planet-visual {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.planet-visual img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* 較明顯的陰影 */
+}
+
+/* 資訊表格 */
+.planet-facts {
+    margin-bottom: 30px;
+}
+
+.planet-facts h2 {
+    border-bottom: 2px solid #333;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.planet-facts table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #1e1e1e; /* 表格背景略淺 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.planet-facts th, .planet-facts td {
+    border: 1px solid #333; /* 邊框顏色 */
+    padding: 12px;
+    text-align: left;
+}
+
+.planet-facts th {
+    background-color: #2c2c2c; /* 標題欄位背景 */
+    color: #ffffff;
+}
+
+/* 詳細描述 */
+.planet-description h2 {
+    margin-top: 30px;
+}
+
+.planet-description p {
+    text-indent: 2em;
+    margin-bottom: 20px;
+}
+
+/* 頁腳 */
+footer {
+    text-align: center;
+    padding: 15px 0;
+    border-top: 1px solid #333;
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: #777;
+}

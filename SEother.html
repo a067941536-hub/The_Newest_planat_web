@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>十二星座運勢 - 宇宙探索</title>
+    <link rel="stylesheet" href="SEstyle.css">
+    <style>
+        /* --- 核心修改：預設隱藏，僅在特定跳轉時觸發 --- */
+        #page-transition {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg,
+                #0a0515, #1a0b35, #0a0515, #0d1a3a, #0a0515, #0a122a
+            );
+            background-size: 400% 400%;
+            z-index: 10001;
+            pointer-events: none;
+            /* 預設隱藏，不影響頁面進入 */
+            display: none; 
+            opacity: 0;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1.2s cubic-bezier(0.3, 0.5, 0.4, 1);
+            animation: nebulaGentleFlow 25s linear infinite; 
+        }
+
+        @keyframes nebulaGentleFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 只有在 JS 觸發時才顯示 */
+        #page-transition.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .loader-text {
+            color: #f0e68c;
+            font-family: 'Segoe UI', "Microsoft JhengHei", sans-serif;
+            font-weight: 500;
+            font-size: 1.5rem;
+            letter-spacing: 8px;
+            text-shadow: 0 0 15px rgba(240, 230, 140, 0.6);
+            animation: blink 2.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.98); }
+        }
+
+        #magic-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        body {
+            cursor: crosshair;
+            background-color: #0a0515;
+            overflow-x: hidden;
+        }
+
+        .wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        .planet-card:hover {
+            border-color: #ffcc66;
+            box-shadow: 0 0 15px rgba(255, 204, 102, 0.2);
+            transform: translateY(-5px);
+        }
+    </style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="cosmos/cosmos.css"><meta name="theme-color" content="#060818">
+</head>
+<body>
+
+    <div id="page-transition">
+        <div class="loader-text">WARPING...</div>
+    </div>
+
+    <canvas id="magic-canvas"></canvas>
+
+    <div class="wrapper">
+        <header class="top-nav">
+            <a href="index.html" class="logo-link"></a>
+            <nav class="menu">
+                <a href="index.html" class="menu-item">主頁</a>
+                <a href="SEplanets.html" class="menu-item">星球</a>
+                <a href="SEother.html" class="menu-item">星座</a>
+                <a href="SEfortune.html" class="menu-item">神社</a>
+                <a href="SEabout.html" class="menu-item">關於</a>
+            </nav>
+        </header>
+
+        <main class="content-area">
+            <div id="other-menu" class="galaxy-map-container">
+                <div class="system-box zodiac-entrance" onclick="toggleZodiacList(true)">
+                    <h2 class="system-title">黃道十二宮星系</h2>
+                    <div class="zodiac-entrance-viz">
+                        <div class="golden-ring"></div>
+                        <div class="star-center">✨</div>
+                    </div>
+                    <p class="click-hint">點擊查看今日運勢全覽</p>
+                </div>
+                <div class="system-box" onclick="location.href='starmap.html'" role="link" tabindex="0" onkeydown="if(event.key==='Enter')location.href='starmap.html'">
+                    <h2 class="system-title">今晚的星空</h2>
+                    <div class="sky-mini"><i></i><b></b></div>
+                    <p class="click-hint">點擊查看星座星空圖</p>
+                </div>
+            </div>
+
+            <div id="zodiac-detail-grid" class="planet-grid-container" style="display:none;">
+                <div class="grid-header">
+                    <button class="back-btn" onclick="toggleZodiacList(false)">← 返回分類</button>
+                    <h2 style="color:#ffcc66;">十二星座全覽</h2>
+                </div>
+                
+               <div class="planet-grid">
+    <a href="zodiac/zodiac_aries.html" class="planet-card">
+        <div class="card-viz"><div class="zodiac-symbol">♈</div></div>
+        <div class="card-info"><h3>白羊座</h3><p>03.21 - 04.19</p></div>
+    </a>
+    <a href="zodiac/zodiac_taurus.html" class="planet-card">
+        <div class="card-viz"><div class="zodiac-symbol">♉</div></div>
+        <div class="card-info"><h3>金牛座</h3><p>04.20 - 05.20</p></div>
+    </a>
+    <a href="zodiac/zodiac_gemini.html" class="planet-card">
+        <div class="card-viz"><div class="zodiac-symbol">♊</div></div>
+        <div class="card-info"><h3>雙子座</h3><p>05.21 - 06.21</p></div>
+    </a>
+    <a href="zodiac/zodiac_cancer.html" class="planet-card">
+        <div class="card-viz"><div class="zodiac-symbol">♋</div></div>
+        <div class="card-info"><h3>巨蟹座</h3><p>06.22 - 07.22</p></div>
+    </a>
+    <a href="zodiac/zodiac_leo.html" class="planet-card">
+        <div class="card-viz"><div class="zodiac-symbol">♌</div></div>
+        <div class="card-info"><h3>獅子座</h3><p>07.23 - 08.22</p></div>
+    </a>
+    <a href="zodiac/zodiac_virgo.html" class="planet-card">
+        <div class="card-viz"><div class="zodiac-symbol">♍</div></div>
+        <div class="card-info"><h3>處女座</h3><p>08.23 - 09.22</p></div>
+    </a>
+    <a href="zodiac/zodiac_libra.html" class="planet-card">
+        <div class="card-viz"><div class="zodiac-symbol">♎</div></div>
+        <div class="card-info"><h3>天秤座</h3><p>09.23 - 10.23</p></div>
+    </a>
+    <a href="zodiac/zodiac_scorpio.html" class="planet-card">
+        <div class="card-viz"><div class="zodiac-symbol">♏</div></div>
+        <div class="card-info"><h3>天蠍座</h3><p>10.24 - 11.22</p></div>
+    </a>
+    <a href="zodiac/zodiac_sagittarius.html" class="planet-card">
+        <div class="card-viz"><div class="zodiac-symbol">♐</div></div>
+        <div class="card-info"><h3>射手座</h3><p>11.23 - 12.21</p></div>
+    </a>
+    <a href="zodiac/zodiac_capricorn.html" class="planet-card">
+        <div class="card-viz"><div class="zodiac-symbol">♑</div></div>
+        <div class="card-info"><h3>摩羯座</h3><p>12.22 - 01.19</p></div>
+    </a>
+    <a href="zodiac/zodiac_aquarius.html" class="planet-card">
+        <div class="card-viz"><div class="zodiac-symbol">♒</div></div>
+        <div class="card-info"><h3>水瓶座</h3><p>01.20 - 02.18</p></div>
+    </a>
+    <a href="zodiac/zodiac_pisces.html" class="planet-card">
+        <div class="card-viz"><div class="zodiac-symbol">♓</div></div>
+        <div class="card-info"><h3>雙魚座</h3><p>02.19 - 03.20</p></div>
+    </a>
+</div>
+            </div>
+        </main>
+
+        <footer class="bottom-footer">
+            <div class="footer-grid">
+                <div class="footer-item">DC: <span>yukixiyu</span></div>
+                <div class="footer-item">IG: <span>YukixiYu</span></div>
+                <div class="footer-item">Gmail: <span>b067941536@gmail.com</span></div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // --- 轉場動畫邏輯 (精簡即時版) ---
+        window.addEventListener('DOMContentLoaded', () => {
+            const transitionLayer = document.getElementById('page-transition');
+            
+            // 1. 完全移除進入頁面時的淡出邏輯，確保進場即時
+
+            // 2. 只針對「星座卡片」綁定 Warping 動畫
+            const transitionLinks = document.querySelectorAll('.planet-card');
+            
+            transitionLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (link.href && link.href.includes(window.location.host)) {
+                        e.preventDefault();
+                        const targetUrl = link.href;
+
+                        // 顯示遮罩並淡入
+                        transitionLayer.style.display = 'flex';
+                        // 使用 requestAnimationFrame 確保 display: flex 先生效，動畫才會跑
+                        requestAnimationFrame(() => {
+                            transitionLayer.classList.add('active');
+                        });
+
+                        setTimeout(() => {
+                            window.location.href = targetUrl;
+                        }, 1200); // 稍微縮短等待時間，提升體驗
+                    }
+                });
+            });
+            // 注意：導覽列按鈕沒有被選取，點擊會像一般網頁一樣直接跳轉。
+        });
+
+        // --- 特效邏輯 (保持不變) ---
+        const canvas = document.getElementById('magic-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [], clickRipples = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        window.addEventListener('mousemove', (e) => {
+            for (let i = 0; i < 3; i++) particles.push(new Particle(e.clientX, e.clientY));
+        });
+
+        window.addEventListener('click', (e) => {
+            clickRipples.push(new Ripple(e.clientX, e.clientY));
+            for(let i=0; i<8; i++) particles.push(new Particle(e.clientX, e.clientY, true)); 
+        });
+
+        class Particle {
+            constructor(x, y, isClickStar = false) {
+                this.x = x; this.y = y; this.isClickStar = isClickStar;
+                const hue = isClickStar ? 280 : (Math.random() < 0.8 ? 50 : 280); 
+                this.color = `hsla(${hue}, 90%, 70%, `; 
+                this.size = isClickStar ? Math.random() * 4 + 2 : Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * (isClickStar ? 4 : 1.5);
+                this.speedY = isClickStar ? (Math.random() * -3 - 1) : (Math.random() * -1 - 0.2);
+                this.life = 1; this.decay = isClickStar ? 0.015 : Math.random() * 0.02 + 0.01;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if(this.isClickStar) { this.speedX *= 0.98; this.speedY *= 0.98; }
+                this.life -= this.decay; if(this.life < 0) this.life = 0;
+            }
+            draw() {
+                ctx.globalCompositeOperation = 'lighter';
+                ctx.fillStyle = this.color + this.life + ')';
+                ctx.shadowBlur = this.isClickStar ? 12 : 5;
+                ctx.shadowColor = this.color + '0.5)';
+                ctx.beginPath();
+                if(this.isClickStar) {
+                    this.drawStar(ctx, this.x, this.y, 4, this.size, this.size/2);
+                } else {
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                }
+                ctx.fill();
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.shadowBlur = 0;
+            }
+            drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius) {
+                let rot = Math.PI / 2 * 3, step = Math.PI / spikes;
+                ctx.beginPath(); ctx.moveTo(cx, cy - outerRadius);
+                for (let i = 0; i < spikes; i++) {
+                    ctx.lineTo(cx + Math.cos(rot) * outerRadius, cy + Math.sin(rot) * outerRadius);
+                    rot += step;
+                    ctx.lineTo(cx + Math.cos(rot) * innerRadius, cy + Math.sin(rot) * innerRadius);
+                    rot += step;
+                }
+                ctx.closePath();
+            }
+        }
+
+        class Ripple {
+            constructor(x, y) {
+                this.x = x; this.y = y; this.radius = 1; this.maxRadius = 70;
+                this.color = 'hsla(280, 90%, 60%, ';
+                this.life = 1; this.decay = 0.025;
+            }
+            update() {
+                this.radius += (this.maxRadius - this.radius) * 0.1;
+                this.life -= this.decay; if(this.life < 0) this.life = 0;
+            }
+            draw() {
+                ctx.strokeStyle = this.color + this.life + ')';
+                ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2); ctx.stroke();
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach((p, i) => { p.update(); p.draw(); if(p.life <= 0) particles.splice(i, 1); });
+            clickRipples.forEach((r, i) => { r.update(); r.draw(); if(r.life <= 0) clickRipples.splice(i, 1); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        function toggleZodiacList(showDetail) {
+            const otherMenu = document.getElementById('other-menu');
+            const zodiacGrid = document.getElementById('zodiac-detail-grid');
+            const contentArea = document.querySelector('.content-area');
+            if (showDetail) {
+                otherMenu.style.display = 'none';
+                zodiacGrid.style.display = 'block';
+                contentArea.style.alignItems = 'flex-start'; 
+            } else {
+                otherMenu.style.display = 'flex';
+                zodiacGrid.style.display = 'none';
+                contentArea.style.alignItems = 'center'; 
+            }
+        }
+    </script>
+<script src="cosmos/cosmos.js"></script>
+<script src="cosmos/zodiac-data.js"></script>
+<script>
+document.querySelectorAll('.planet-card[href*="zodiac_"]').forEach(function(a){
+  var id=a.getAttribute('href').match(/zodiac_(\w+)\.html/)[1],d=ZODIAC.daily(id,0),st='';
+  for(var i=1;i<=5;i++)st+=i<=d.overall?'★':'☆';
+  var p=document.createElement('p');p.className='today-stars';p.title='今日運勢';p.textContent=st;a.querySelector('.card-info').appendChild(p);
+});
+</script>
+</body>
+</html>
